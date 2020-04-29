@@ -9,7 +9,7 @@ extern "C" {
 #include "msgbus/messagebus.h"
 #include "parameter/parameter.h"
 
-//constants for the differents parts of the project
+//constants for the differents parts of the miniproject
 
 enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
 #define ERROR_THRESHOLD			100.0f
