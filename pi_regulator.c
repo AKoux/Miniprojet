@@ -57,7 +57,10 @@ static THD_FUNCTION(PiRegulator, arg) {
 
     int16_t speed_ini = 600;
     int16_t speed_correction = 0;
-    //int l_pos, r_pos;
+
+	uint move;
+	uint inter=0;
+
 
     while(1){
         //time = chVTGetSystemTime();
@@ -73,28 +76,56 @@ static THD_FUNCTION(PiRegulator, arg) {
         if(abs(speed_correction) > 500){
                 speed_correction = 500;
         }
+
+        move=get_movement();
         //100Hz
         //chThdSleepUntilWindowed(time, time + MS2ST(10));
-
-        if(!get_movement()){
+        chprintf((BaseSequentialStream *) &SD3, "position_%d\n", move);
+        if(!move){
         	right_motor_set_speed(speed_ini  + ROTATION_COEFF * speed_correction);
         	left_motor_set_speed(speed_ini - ROTATION_COEFF * speed_correction);
+
+			//chprintf((BaseSequentialStream *) &SD3, "position_%d\n", 5);
         }
-        else if(get_movement()== 1){
+
+        else{
+
+        	if(inter==0){
+        	 left_motor_set_pos(-600);
+        	 while (left_motor_get_pos()<0){
+        		 right_motor_set_speed(+speed_ini);
+        	     left_motor_set_speed(+speed_ini);
+        	        	}
+        	 inter=1;
+        	}
+
+        	if(move==1){
+
         	left_motor_set_pos(324);
-			//while (!(l_pos-350<left_motor_get_pos()) && (l_pos-310>left_motor_get_pos())){
 			while (left_motor_get_pos()>0){
-				chprintf((BaseSequentialStream *) &SD3, "sum_error_%d\n", left_motor_get_pos());
 	        	right_motor_set_speed(+speed_ini/2);
 	        	left_motor_set_speed(-speed_ini/2);
-			}
+				}
+			left_motor_set_pos(-600);
+			while (left_motor_get_pos()<0){
+				right_motor_set_speed(+speed_ini);
+				left_motor_set_speed(+speed_ini);
+				}
+			inter=0;
+        	}
+
+        	else{
+        		right_motor_set_speed(0);
+        		left_motor_set_speed(0);
+        		}
 
         }
-        else{
-        	right_motor_set_speed(0);
-        	left_motor_set_speed(0);
-        }
+
+       chThdYield();
+        //chprintf((BaseSequentialStream *) &SD3, "Position_%d\n", get_movement());
+
     }
+
 }
 
 void pi_regulator_start(void){
