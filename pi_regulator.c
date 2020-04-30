@@ -63,7 +63,7 @@ static THD_FUNCTION(PiRegulator, arg) {
 
 
     while(1){
-        //time = chVTGetSystemTime();
+        time = chVTGetSystemTime();
 
         //computes a correction factor to let the robot rotate to be in front of the line
         speed_correction = pi_regulator(get_side());
@@ -79,8 +79,8 @@ static THD_FUNCTION(PiRegulator, arg) {
 
         move=get_movement();
         //100Hz
-        //chThdSleepUntilWindowed(time, time + MS2ST(10));
-        chprintf((BaseSequentialStream *) &SD3, "position_%d\n", move);
+        chThdSleepUntilWindowed(time, time + MS2ST(10));
+        //chprintf((BaseSequentialStream *) &SD3, "position_%d\n", move);
         if(!move){
         	right_motor_set_speed(speed_ini  + ROTATION_COEFF * speed_correction);
         	left_motor_set_speed(speed_ini - ROTATION_COEFF * speed_correction);
@@ -88,7 +88,7 @@ static THD_FUNCTION(PiRegulator, arg) {
 			//chprintf((BaseSequentialStream *) &SD3, "position_%d\n", 5);
         }
 
-        else{
+      /*  else{
 
         	if(inter==0){
         	 left_motor_set_pos(-600);
@@ -112,14 +112,14 @@ static THD_FUNCTION(PiRegulator, arg) {
 				left_motor_set_speed(+speed_ini);
 				}
 			inter=0;
-        	}
+        	}*/
 
         	else{
         		right_motor_set_speed(0);
         		left_motor_set_speed(0);
         		}
 
-        }
+        /*}*/
 
        chThdYield();
         //chprintf((BaseSequentialStream *) &SD3, "Position_%d\n", get_movement());
