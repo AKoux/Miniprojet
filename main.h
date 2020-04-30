@@ -18,6 +18,7 @@ enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
 #define KP						0.1f
 #define KI 						0.01f	//must not be zero
 #define MAX_SUM_ERROR 			(MOTOR_SPEED_LIMIT/KI)
+#define SPEED_INI				600
 /** Robot wide IPC bus. */
 extern messagebus_t bus;
 

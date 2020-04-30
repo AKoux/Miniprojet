@@ -30,4 +30,14 @@ void wait_send_to_computer(void);
 */
 float* get_audio_buffer_ptr(BUFFER_NAME_t name);
 
+/*
+*	enable and disable the directions
+*/
+void direction_enable(uint direction);
+
+/*
+*	do the asked displacement
+*/
+void audio_displacement(uint displacement);
+
 #endif /* AUDIO_PROCESSING_H */

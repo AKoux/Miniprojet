@@ -96,6 +96,7 @@ int main(void)
     proximity_start();
     pi_regulator_start();
 #endif /*PI*/
+    proximity_start();
 
     /* Infinite loop. */
     while (1) {

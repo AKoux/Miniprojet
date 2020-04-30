@@ -55,7 +55,7 @@ static THD_FUNCTION(PiRegulator, arg) {
 
     systime_t time;
 
-    int16_t speed_ini = 600;
+    //int16_t speed_ini = 600;
     int16_t speed_correction = 0;
 
 	uint move;
@@ -82,8 +82,8 @@ static THD_FUNCTION(PiRegulator, arg) {
         chThdSleepUntilWindowed(time, time + MS2ST(10));
         //chprintf((BaseSequentialStream *) &SD3, "position_%d\n", move);
         if(!move){
-        	right_motor_set_speed(speed_ini  + ROTATION_COEFF * speed_correction);
-        	left_motor_set_speed(speed_ini - ROTATION_COEFF * speed_correction);
+        	right_motor_set_speed(SPEED_INI  + ROTATION_COEFF * speed_correction);
+        	left_motor_set_speed(SPEED_INI - ROTATION_COEFF * speed_correction);
 
 			//chprintf((BaseSequentialStream *) &SD3, "position_%d\n", 5);
         }

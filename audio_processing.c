@@ -24,12 +24,12 @@ static float micLeft_output[FFT_SIZE];
 
 #define MIN_VALUE_THRESHOLD	10000 
 
-#define MIN_FREQ		10	//we don't analyze before this index to not use resources for nothing
-#define FREQ_FORWARD	16	//250Hz (= 16*15.625, the resolution)
-#define FREQ_LEFT		19	//296Hz
-#define FREQ_RIGHT		23	//359HZ
-#define FREQ_BACKWARD	26	//406Hz
-#define MAX_FREQ		30	//we don't analyze after this index to not use resources for nothing
+#define MIN_FREQ		30	//we don't analyze before this index to not use resources for nothing
+#define FREQ_FORWARD	36	//562.5Hz (= 16*15.625, the resolution)
+#define FREQ_LEFT		42	//656.25Hz
+#define FREQ_RIGHT		48	//750HZ
+#define FREQ_BACKWARD	54	//843.75Hz
+#define MAX_FREQ		60	//we don't analyze after this index to not use resources for nothing
 
 #define FREQ_FORWARD_L		(FREQ_FORWARD-1)
 #define FREQ_FORWARD_H		(FREQ_FORWARD+1)
@@ -40,6 +40,13 @@ static float micLeft_output[FFT_SIZE];
 #define FREQ_BACKWARD_L		(FREQ_BACKWARD-1)
 #define FREQ_BACKWARD_H		(FREQ_BACKWARD+1)
 
+#define	DISABLE_DIR	0
+#define	ENABLE_DIR	1
+
+static uint forward = 0;
+static uint left = 0;
+static uint right = 0;
+static uint backward = 0;
 /*
 *	Simple function used to detect the highest value in a buffer
 *	and to execute a motor command depending on it
@@ -48,8 +55,9 @@ static float micLeft_output[FFT_SIZE];
 void sound_remote(float* data){
 	float max_norm = MIN_VALUE_THRESHOLD;
 	int16_t max_norm_index = -1; 
-	int16_t speed_ini = 600;
+	//int16_t speed_ini = 600;
 
+	direction_enable(get_movement());
 	//search for the highest peak
 	for(uint16_t i = MIN_FREQ ; i <= MAX_FREQ ; i++){
 		if(data[i] > max_norm){
@@ -57,74 +65,35 @@ void sound_remote(float* data){
 			max_norm_index = i;
 		}
 	}
-
-	//go forward
+	//go forward if want to and can
 	if(max_norm_index >= FREQ_FORWARD_L && max_norm_index <= FREQ_FORWARD_H){
-		left_motor_set_pos(-600);
-		right_motor_set_speed(+speed_ini);
-		left_motor_set_speed(+speed_ini);
-		while (left_motor_get_pos()<0){
-				;
+		if(forward){
+			audio_displacement(0);
 		}
-		right_motor_set_speed(0);
-		left_motor_set_speed(0);
 	}
-	//turn left
+	//turn left if want to and can
 	else if(max_norm_index >= FREQ_LEFT_L && max_norm_index <= FREQ_LEFT_H){
-		left_motor_set_pos(324);
-	     right_motor_set_speed(+speed_ini/2);
-	     left_motor_set_speed(-speed_ini/2);
-		while (left_motor_get_pos()>0){
-				;
+		if(left){
+			audio_displacement(1);
 		}
-		left_motor_set_pos(-600);
-		right_motor_set_speed(+speed_ini);
-		left_motor_set_speed(+speed_ini);
-		while (left_motor_get_pos()<0){
-				;
-		}
-		right_motor_set_speed(0);
-		left_motor_set_speed(0);
 	}
-	//turn right
+	//turn right if want to and can
 	else if(max_norm_index >= FREQ_RIGHT_L && max_norm_index <= FREQ_RIGHT_H){
-		right_motor_set_pos(324);
-	     right_motor_set_speed(-speed_ini/2);
-	     left_motor_set_speed(+speed_ini/2);
-		while (right_motor_get_pos()>0){
-				;
+		if(right){
+			audio_displacement(2);
 		}
-		left_motor_set_pos(-600);
-		right_motor_set_speed(+speed_ini);
-		left_motor_set_speed(+speed_ini);
-		while (left_motor_get_pos()<0){
-				;
-		}
-		right_motor_set_speed(0);
-		left_motor_set_speed(0);
 	}
-	//go backward
+	//go backward if want to and can
 	else if(max_norm_index >= FREQ_BACKWARD_L && max_norm_index <= FREQ_BACKWARD_H){
-		left_motor_set_pos(648);
-	     right_motor_set_speed(+speed_ini/2);
-	     left_motor_set_speed(-speed_ini/2);
-		while (left_motor_get_pos()>0){
-				;
+		if(backward){
+			audio_displacement(3);
 		}
-		left_motor_set_pos(-600);
-		right_motor_set_speed(+speed_ini);
-		left_motor_set_speed(+speed_ini);
-		while (left_motor_get_pos()<0){
-				;
-		}
-		right_motor_set_speed(0);
-		left_motor_set_speed(0);
 	}
 	else{
 		left_motor_set_speed(0);
 		right_motor_set_speed(0);
 	}
-	
+	right = DISABLE; left = DISABLE; forward = DISABLE; backward = DISABLE;
 }
 
 /*
@@ -212,5 +181,108 @@ float* get_audio_buffer_ptr(BUFFER_NAME_t name){
 	}
 	else{
 		return NULL;
+	}
+}
+
+void direction_enable(uint direction){
+	switch(direction)
+	{
+					case 0:
+						forward = ENABLE;
+						backward = ENABLE;
+						break;
+					case 1:
+						left = ENABLE;
+						backward = ENABLE;
+						break;
+					case 2:
+						right = ENABLE;
+						backward = ENABLE;
+						break;
+					case 3:
+						right = ENABLE;
+						left = ENABLE;
+						backward = ENABLE;
+						break;
+					case 4:
+						left = ENABLE;
+						forward = ENABLE;
+						backward = ENABLE;
+						break;
+					case 5:
+						right = ENABLE;
+						forward = ENABLE;
+						backward = ENABLE;
+						break;
+					case 6:
+						left = ENABLE;
+						right = ENABLE;
+						forward = ENABLE;
+						backward = ENABLE;
+						break;
+	}
+}
+
+void audio_displacement(uint displacement){
+	switch(displacement)
+	{
+		case 0: //goes forward
+			left_motor_set_pos(-600);
+			right_motor_set_speed(+SPEED_INI);
+			left_motor_set_speed(+SPEED_INI);
+			while (left_motor_get_pos()<0){
+					;
+			}
+			right_motor_set_speed(0);
+			left_motor_set_speed(0);
+			break;
+		case 1: //turns left
+			left_motor_set_pos(324);
+			right_motor_set_speed(+SPEED_INI/2);
+			left_motor_set_speed(-SPEED_INI/2);
+			while (left_motor_get_pos()>0){
+					;
+			}
+			left_motor_set_pos(-600);
+			right_motor_set_speed(+SPEED_INI);
+			left_motor_set_speed(+SPEED_INI);
+			while (left_motor_get_pos()<0){
+					;
+			}
+			right_motor_set_speed(0);
+			left_motor_set_speed(0);
+			break;
+		case 2: //turns right
+			right_motor_set_pos(324);
+		    right_motor_set_speed(-SPEED_INI/2);
+		    left_motor_set_speed(+SPEED_INI/2);
+			while (right_motor_get_pos()>0){
+					;
+			}
+			left_motor_set_pos(-600);
+			right_motor_set_speed(+SPEED_INI);
+			left_motor_set_speed(+SPEED_INI);
+			while (left_motor_get_pos()<0){
+					;
+			}
+			right_motor_set_speed(0);
+			left_motor_set_speed(0);
+			break;
+		case 3: //turns backward
+			left_motor_set_pos(2*324);
+		     right_motor_set_speed(+SPEED_INI/2);
+		     left_motor_set_speed(-SPEED_INI/2);
+			while (left_motor_get_pos()>0){
+					;
+			}
+			left_motor_set_pos(-600);
+			right_motor_set_speed(+SPEED_INI);
+			left_motor_set_speed(+SPEED_INI);
+			while (left_motor_get_pos()<0){
+					;
+			}
+			right_motor_set_speed(0);
+			left_motor_set_speed(0);
+			break;
 	}
 }
