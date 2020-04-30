@@ -115,6 +115,8 @@ int main(void)
 #endif  /* DOUBLE_BUFFERING */
 #else
         /*
+         *
+         *
 
          ///time measurement variables
         volatile uint16_t time_fft = 0;
@@ -158,7 +160,8 @@ int main(void)
             //chprintf((BaseSequentialStream *) &SDU1, "time fft = %d us, time magnitude = %d us\n",time_fft, time_mag);
 
         }*/
-
+        chprintf((BaseSequentialStream *) &SD3, "Position_%d\n",get_movement());
+        chThdYield();
 
 
 #endif  /* SEND_FROM_MIC */
