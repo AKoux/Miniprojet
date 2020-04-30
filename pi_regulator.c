@@ -80,46 +80,24 @@ static THD_FUNCTION(PiRegulator, arg) {
         move=get_movement();
         //100Hz
         chThdSleepUntilWindowed(time, time + MS2ST(10));
-        //chprintf((BaseSequentialStream *) &SD3, "position_%d\n", move);
+        chprintf((BaseSequentialStream *) &SD3, "pi_regulaor thread\n");
         if(!move){
         	right_motor_set_speed(SPEED_INI  + ROTATION_COEFF * speed_correction);
         	left_motor_set_speed(SPEED_INI - ROTATION_COEFF * speed_correction);
 
-			//chprintf((BaseSequentialStream *) &SD3, "position_%d\n", 5);
+			chprintf((BaseSequentialStream *) &SD3, "move actif%d\n", 5);
         }
-
-      /*  else{
-
-        	if(inter==0){
-        	 left_motor_set_pos(-600);
-        	 while (left_motor_get_pos()<0){
-        		 right_motor_set_speed(+speed_ini);
-        	     left_motor_set_speed(+speed_ini);
-        	        	}
-        	 inter=1;
-        	}
-
-        	if(move==1){
-
-        	left_motor_set_pos(324);
-			while (left_motor_get_pos()>0){
-	        	right_motor_set_speed(+speed_ini/2);
-	        	left_motor_set_speed(-speed_ini/2);
-				}
-			left_motor_set_pos(-600);
+        else{
+        	chprintf((BaseSequentialStream *) &SD3, "move non actif%d\n", 5);
+			/*left_motor_set_pos(-300);
+			right_motor_set_speed(+SPEED_INI);
+			left_motor_set_speed(+SPEED_INI);
 			while (left_motor_get_pos()<0){
-				right_motor_set_speed(+speed_ini);
-				left_motor_set_speed(+speed_ini);
-				}
-			inter=0;
-        	}*/
-
-        	else{
-        		right_motor_set_speed(0);
-        		left_motor_set_speed(0);
-        		}
-
-        /*}*/
+					;
+			}*/
+			right_motor_set_speed(0);
+			left_motor_set_speed(0);
+        	}
 
        chThdYield();
         //chprintf((BaseSequentialStream *) &SD3, "Position_%d\n", get_movement());
@@ -129,5 +107,5 @@ static THD_FUNCTION(PiRegulator, arg) {
 }
 
 void pi_regulator_start(void){
-	chThdCreateStatic(waPiRegulator, sizeof(waPiRegulator), NORMALPRIO, PiRegulator, NULL);
+	chThdCreateStatic(waPiRegulator, sizeof(waPiRegulator), NORMALPRIO+5, PiRegulator, NULL);
 }

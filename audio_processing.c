@@ -118,53 +118,55 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 	static uint16_t nb_samples = 0;
 	static uint8_t mustSend = 0;
 
+	if(get_movement()){ //process audio only if in crossroad
 	//loop to fill the buffers
-	for(uint16_t i = 0 ; i < num_samples ; i+=4){
-		//construct an array of complex numbers. Put 0 to the imaginary part
-		micLeft_cmplx_input[nb_samples] = (float)data[i + MIC_LEFT];
+		for(uint16_t i = 0 ; i < num_samples ; i+=4){
+			//construct an array of complex numbers. Put 0 to the imaginary part
+			micLeft_cmplx_input[nb_samples] = (float)data[i + MIC_LEFT];
 
 
-		nb_samples++;
+			nb_samples++;
 
-		micLeft_cmplx_input[nb_samples] = 0;
+			micLeft_cmplx_input[nb_samples] = 0;
 
-		nb_samples++;
+			nb_samples++;
 
-		//stop when buffer is full
+			//stop when buffer is full
+			if(nb_samples >= (2 * FFT_SIZE)){
+				break;
+			}
+		}
+
 		if(nb_samples >= (2 * FFT_SIZE)){
-			break;
+			/*	FFT proccessing
+			 *
+			 *	This FFT function stores the results in the input buffer given.
+			 *	This is an "In Place" function.
+			 */
+
+			doFFT_optimized(FFT_SIZE, micLeft_cmplx_input);
+			/*	Magnitude processing
+			 *
+			 *	Computes the magnitude of the complex numbers and
+			 *	stores them in a buffer of FFT_SIZE because it only contains
+			 *	real numbers.
+			 *
+			 */
+			arm_cmplx_mag_f32(micLeft_cmplx_input, micLeft_output, FFT_SIZE);
+
+
+			//sends only one FFT result over 10 for 1 mic to not flood the computer
+			//sends to UART3
+			if(mustSend > 8){
+				//signals to send the result to the computer
+				chBSemSignal(&sendToComputer_sem);
+				mustSend = 0;
+			}
+			nb_samples = 0;
+			mustSend++;
+
+			sound_remote(micLeft_output);
 		}
-	}
-
-	if(nb_samples >= (2 * FFT_SIZE)){
-		/*	FFT proccessing
-		*
-		*	This FFT function stores the results in the input buffer given.
-		*	This is an "In Place" function. 
-		*/
-
-		doFFT_optimized(FFT_SIZE, micLeft_cmplx_input);
-		/*	Magnitude processing
-		*
-		*	Computes the magnitude of the complex numbers and
-		*	stores them in a buffer of FFT_SIZE because it only contains
-		*	real numbers.
-		*
-		*/
-		arm_cmplx_mag_f32(micLeft_cmplx_input, micLeft_output, FFT_SIZE);
-
-
-		//sends only one FFT result over 10 for 1 mic to not flood the computer
-		//sends to UART3
-		if(mustSend > 8){
-			//signals to send the result to the computer
-			chBSemSignal(&sendToComputer_sem);
-			mustSend = 0;
-		}
-		nb_samples = 0;
-		mustSend++;
-
-		sound_remote(micLeft_output);
 	}
 }
 

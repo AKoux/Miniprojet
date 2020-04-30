@@ -26,7 +26,7 @@ MUTEX_DECL(bus_lock); // @suppress("Field cannot be resolved")
 CONDVAR_DECL(bus_condvar);
 
 //uncomment to send the FFTs results from the real microphones
-//#define SPACIAL_MOVEMENT
+#define SPACIAL_MOVEMENT
 
 
 static void serial_start(void)
@@ -86,28 +86,27 @@ int main(void)
     //to avoid modifications of the buffer while sending it
     static float send_tab[FFT_SIZE];
 
-
+    //stars the thread----------------------------------
+#ifdef SPACIAL_MOVEMENT
+    pi_regulator_start();
+#endif /*PI*/
+    proximity_start();
     //starts the microphones processing thread.
     //it calls the callback given in parameter when samples are ready
     mic_start(&processAudioData);
 
-#ifdef SPACIAL_MOVEMENT
-    //stars the threads
-    proximity_start();
-    pi_regulator_start();
-#endif /*PI*/
-    proximity_start();
+
 
     /* Infinite loop. */
     while (1) {
 
-        //waits until a result must be sent to the computer
+       /* //waits until a result must be sent to the computer
         wait_send_to_computer();
 
         //we copy the buffer to avoid conflicts
         arm_copy_f32(get_audio_buffer_ptr(LEFT_OUTPUT), send_tab, FFT_SIZE);
         SendFloatToComputer((BaseSequentialStream *) &SD3, send_tab, FFT_SIZE);
-
+		*/
 
 
         /*    mesurer time to do stuff
@@ -122,7 +121,7 @@ int main(void)
         chprintf((BaseSequentialStream *) &SDU1, "time fft = %d us, time magnitude = %d us\n",time_fft, time_mag);*/
 
 
-        chprintf((BaseSequentialStream *) &SD3, "Position_%d\n",get_movement());
+        //chprintf((BaseSequentialStream *) &SD3, "Position_%d\n",get_movement());
         chThdYield();
 
 
