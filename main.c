@@ -11,14 +11,21 @@
 #include <motors.h>
 #include <audio/microphone.h>
 #include <sensors/proximity.h>
+//#include <stm32f407xx.h>
+//#include <gpio.h>
 
 #include <audio_processing.h>
 #include <ir_processing.h>
+#include <pi_regulator.h>
 #include <fft.h>
 #include <communications.h>
 #include <arm_math.h>
 
 
+/*void gpio_config_output_opendrain(GPIO_TypeDef *port, unsigned int pin);
+void gpio_set(GPIO_TypeDef *port, unsigned int pin);
+void gpio_clear(GPIO_TypeDef *port, unsigned int pin);
+void gpio_toggle(GPIO_TypeDef *port, unsigned int pin);*/
 
 //global declaration for proximity.h
 messagebus_t bus;
@@ -59,9 +66,16 @@ static void timer12_start(void){
 
 int main(void)
 {
+
+	//SystemClock_Config();
     halInit();
     chSysInit();
     mpu_init();
+
+    /*gpio_config_output_opendrain(LED1);
+    gpio_config_output_opendrain(LED3);
+    gpio_config_output_opendrain(LED5);
+    gpio_config_output_opendrain(LED7);*/
 
     //starts the serial communication
     serial_start();
@@ -88,7 +102,13 @@ int main(void)
     /* Infinite loop. */
     while (1) {
 
-        /*    mesurer time to do stuff
+    	/*gpio_toggle(LED1);
+        gpio_toggle(LED3);
+        gpio_toggle(LED5);
+        gpio_toggle(LED7);*/
+
+        /*
+        measure time to do stuff
               	  	chSysLock();
                     //reset the timer counter
                     GPTD12.tim->CNT = 0;
@@ -97,7 +117,7 @@ int main(void)
 
                     time_mag = GPTD12.tim->CNT;
                     chSysUnlock();
-        chprintf((BaseSequentialStream *) &SDU1, "time fft = %d us, time magnitude = %d us\n",time_fft, time_mag);
+        chprintf((BaseSequentialStream *) &SD3, time magnitude = %d us\n", time_mag);
         */
         chThdYield();
     }
@@ -110,3 +130,41 @@ void __stack_chk_fail(void)
 {
     chSysHalt("Stack smashing detected");
 }
+/*
+void gpio_config_output_opendrain(GPIO_TypeDef *port, unsigned int pin)
+{
+    // Output type open-drain : OTy = 1
+    port->OTYPER |= (1 << pin);
+
+    // Output data low : ODRy = 0
+    port->ODR &= ~(1 << pin);
+
+    // Pull-up : PUPDRy = 01
+    port->PUPDR = (port->PUPDR & ~(3 << (pin * 2))) | (1 << (pin * 2));
+
+    // Output speed highest : OSPEEDRy = 11
+    port->OSPEEDR |= (3 << (pin * 2));
+
+    // Output mode : MODERy = 01
+    port->MODER = (port->MODER & ~(3 << (pin * 2))) | (1 << (pin * 2));
+}
+
+
+void gpio_set(GPIO_TypeDef *port, unsigned int pin)
+{
+    port->BSRR = (1 << pin);
+}
+
+void gpio_clear(GPIO_TypeDef *port, unsigned int pin)
+{
+    port->BSRR = (1 << (pin + 16));
+}
+
+void gpio_toggle(GPIO_TypeDef *port, unsigned int pin)
+{
+    if (port->ODR & (1<<pin)) {
+        gpio_clear(port, pin);
+    } else {
+    	gpio_set(port, pin);
+    }
+}*/

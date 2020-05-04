@@ -55,33 +55,31 @@ static THD_FUNCTION(PiRegulator, arg) {
 
     systime_t time;
 
-    //int16_t speed_ini = 600;
     int16_t speed_correction = 0;
 
 	uint move;
-	uint inter=0;
-
 
     while(1){
         time = chVTGetSystemTime();
 
-        //computes a correction factor to let the robot rotate to be in front of the line
-        speed_correction = pi_regulator(get_side());
-
-        /*//if the line is nearly in front of the camera, don't rotate
-        if(abs(speed_correction) < ROTATION_THRESHOLD){
-        	speed_correction = 0;
-        }
-        */
-        if(abs(speed_correction) > 500){
-                speed_correction = 500;
-        }
-
+       //100Hz
+       // chThdSleepUntilWindowed(time, time + MS2ST(10));
         move=get_movement();
-        //100Hz
-        chThdSleepUntilWindowed(time, time + MS2ST(10));
         chprintf((BaseSequentialStream *) &SD3, "pi_regulaor thread\n");
+
         if(!move){
+
+        	//computes a correction factor to let the robot rotate to be in front of the line
+        	speed_correction = pi_regulator(get_side());
+
+        	/*//if the line is nearly in front of the camera, don't rotate
+        	if(abs(speed_correction) < ROTATION_THRESHOLD){
+        	speed_correction = 0;
+        	  }
+        	  */
+        	if(abs(speed_correction) > 500){
+        		speed_correction = 500;
+        	    }
         	right_motor_set_speed(SPEED_INI  + ROTATION_COEFF * speed_correction);
         	left_motor_set_speed(SPEED_INI - ROTATION_COEFF * speed_correction);
 
@@ -89,23 +87,24 @@ static THD_FUNCTION(PiRegulator, arg) {
         }
         else{
         	chprintf((BaseSequentialStream *) &SD3, "move non actif%d\n", 5);
-			/*left_motor_set_pos(-300);
+			left_motor_set_pos(-600);
 			right_motor_set_speed(+SPEED_INI);
 			left_motor_set_speed(+SPEED_INI);
 			while (left_motor_get_pos()<0){
 					;
-			}*/
+			}
 			right_motor_set_speed(0);
 			left_motor_set_speed(0);
         	}
+        chThdSleepUntilWindowed(time, time + MS2ST(10));
 
        chThdYield();
-        //chprintf((BaseSequentialStream *) &SD3, "Position_%d\n", get_movement());
+       //chprintf((BaseSequentialStream *) &SD3, "Position_%d\n", get_movement());
 
     }
 
 }
 
 void pi_regulator_start(void){
-	chThdCreateStatic(waPiRegulator, sizeof(waPiRegulator), NORMALPRIO+5, PiRegulator, NULL);
+	chThdCreateStatic(waPiRegulator, sizeof(waPiRegulator), NORMALPRIO, PiRegulator, NULL);
 }

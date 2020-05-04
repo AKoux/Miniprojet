@@ -13,7 +13,7 @@
 #include <arm_math.h>
 
 #define MARGE	0.5		//Marge en % pour comparer les get_prox IR
-#define CHECK	5		//Marge de verification avant assurer le croisement (en compare "CHECK" fois les get_prox)
+#define CHECK	6		//Marge de verification avant assurer le croisement (en compare "CHECK" fois les get_prox)
 enum MOVEMENT{forward, l_turn, r_turn, l_r_turn, f_l_turn, f_r_turn, f_l_r_turn}; //(l=left, r=right, f=forward)
 
 static uint movement = 0;
@@ -90,7 +90,7 @@ uint get_movement(void){
         o++;
         i=0; j=0; k=0; l=0; n=0; m=0;
         if(o>=CHECK){
-        	movement = f_l_r_turn;
+        	movement = f_l_r_turn; //ou vide
         	//chprintf((BaseSequentialStream *) &SD3, "f_l_r_turn\n");
         }
     }

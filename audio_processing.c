@@ -115,11 +115,16 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 	*
 	*/
 
+
+
 	static uint16_t nb_samples = 0;
 	static uint8_t mustSend = 0;
 
-	if(get_movement()){ //process audio only if in crossroad
+	if(get_movement()){ //process audio only if in cross-road
 	//loop to fill the buffers
+
+		chprintf((BaseSequentialStream *) &SD3, "process son, move:%d\n", get_movement());
+
 		for(uint16_t i = 0 ; i < num_samples ; i+=4){
 			//construct an array of complex numbers. Put 0 to the imaginary part
 			micLeft_cmplx_input[nb_samples] = (float)data[i + MIC_LEFT];
@@ -138,7 +143,7 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 		}
 
 		if(nb_samples >= (2 * FFT_SIZE)){
-			/*	FFT proccessing
+			/*	FFT processing
 			 *
 			 *	This FFT function stores the results in the input buffer given.
 			 *	This is an "In Place" function.
@@ -168,6 +173,7 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 			sound_remote(micLeft_output);
 		}
 	}
+
 }
 
 void wait_send_to_computer(void){
@@ -226,6 +232,7 @@ void direction_enable(uint direction){
 }
 
 void audio_displacement(uint displacement){
+
 	switch(displacement)
 	{
 		case 0: //goes forward
@@ -237,6 +244,7 @@ void audio_displacement(uint displacement){
 			}
 			right_motor_set_speed(0);
 			left_motor_set_speed(0);
+
 			break;
 		case 1: //turns left
 			left_motor_set_pos(324);

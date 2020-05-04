@@ -20,6 +20,12 @@ enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
 #define MAX_SUM_ERROR 			(MOTOR_SPEED_LIMIT/KI)
 #define SPEED_INI				600
 /** Robot wide IPC bus. */
+
+/*#define LED1     	GPIOD, 5
+#define LED3     	GPIOD, 6
+#define LED5     	GPIOD, 10
+#define LED7     	GPIOD, 11*/
+
 extern messagebus_t bus;
 
 extern parameter_namespace_t parameter_root;
