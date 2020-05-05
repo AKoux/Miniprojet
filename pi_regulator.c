@@ -6,6 +6,7 @@
 
 #include <main.h>
 #include <motors.h>
+#include "leds.h"
 #include <audio_processing.h>
 #include <pi_regulator.h>
 //#include <process_image.h>
@@ -37,6 +38,9 @@ int16_t pi_regulator(float difference){
 		sum_error = -MAX_SUM_ERROR;
 	}
 
+	/*if(fabs(error) < 300){
+			sum_error=0 ;
+		}*/
 	speed = KP * error;
 	//speed = KP * error + KI * sum_error;
 
@@ -57,7 +61,7 @@ static THD_FUNCTION(PiRegulator, arg) {
 
     int16_t speed_correction = 0;
 
-	uint move;
+	uint move; uint first_stop=1;
 
     while(1){
         time = chVTGetSystemTime();
@@ -68,6 +72,8 @@ static THD_FUNCTION(PiRegulator, arg) {
         chprintf((BaseSequentialStream *) &SD3, "pi_regulaor thread\n");
 
         if(!move){
+        	first_stop=1;
+        	clear_leds();
 
         	//computes a correction factor to let the robot rotate to be in front of the line
         	speed_correction = pi_regulator(get_side());
@@ -77,28 +83,33 @@ static THD_FUNCTION(PiRegulator, arg) {
         	speed_correction = 0;
         	  }
         	  */
-        	if(abs(speed_correction) > 500){
-        		speed_correction = 500;
+        	if(abs(speed_correction) > 200){
+        		speed_correction = 200;
         	    }
         	right_motor_set_speed(SPEED_INI  + ROTATION_COEFF * speed_correction);
         	left_motor_set_speed(SPEED_INI - ROTATION_COEFF * speed_correction);
 
 			chprintf((BaseSequentialStream *) &SD3, "move actif%d\n", 5);
         }
-        else{
+        else if(move && first_stop){
         	chprintf((BaseSequentialStream *) &SD3, "move non actif%d\n", 5);
-			left_motor_set_pos(-600);
+			first_stop=0;
+        	//left_motor_set_pos(-600);
 			right_motor_set_speed(+SPEED_INI);
 			left_motor_set_speed(+SPEED_INI);
-			while (left_motor_get_pos()<0){
+			chThdSleepMilliseconds(700);
+			/*while (left_motor_get_pos()<0){
 					;
 			}
+			//chThdSleepMilliseconds(500);*/
+        }
+        else{
 			right_motor_set_speed(0);
 			left_motor_set_speed(0);
-        	}
+        }
         chThdSleepUntilWindowed(time, time + MS2ST(10));
 
-       chThdYield();
+        chThdYield();
        //chprintf((BaseSequentialStream *) &SD3, "Position_%d\n", get_movement());
 
     }

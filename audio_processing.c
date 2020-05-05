@@ -5,6 +5,7 @@
 #include <chprintf.h>
 
 #include <motors.h>
+#include "leds.h"
 #include <audio/microphone.h>
 #include <audio_processing.h>
 #include <ir_processing.h>
@@ -58,6 +59,7 @@ void sound_remote(float* data){
 	//int16_t speed_ini = 600;
 
 	direction_enable(get_movement());
+	direction_led();
 	//search for the highest peak
 	for(uint16_t i = MIN_FREQ ; i <= MAX_FREQ ; i++){
 		if(data[i] > max_norm){
@@ -228,6 +230,21 @@ void direction_enable(uint direction){
 						forward = ENABLE;
 						backward = ENABLE;
 						break;
+	}
+}
+
+void direction_led(void){
+	if(forward==DISABLE){
+    	set_led(LED1, ON);
+	}
+	if(left==DISABLE){
+    	set_led(LED7, ON);
+	}
+	if(right==DISABLE){
+    	set_led(LED3, ON);
+	}
+	if(backward==DISABLE){
+    	set_led(LED5, ON);
 	}
 }
 
