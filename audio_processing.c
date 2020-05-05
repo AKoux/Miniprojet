@@ -22,13 +22,10 @@ static float micLeft_cmplx_input[2 * FFT_SIZE];
 //Arrays containing the computed magnitude of the complex numbers
 static float micLeft_output[FFT_SIZE];
 
-
-
-
 #define MIN_VALUE_THRESHOLD	10000 
 
 #define MIN_FREQ		30	//we don't analyze before this index to not use resources for nothing
-#define FREQ_FORWARD	36	//562.5Hz (= 16*15.625, the resolution)
+#define FREQ_FORWARD	36	//562.5Hz (= 36*15.625, 15.625 is the resolution)
 #define FREQ_LEFT		42	//656.25Hz
 #define FREQ_RIGHT		48	//750HZ
 #define FREQ_BACKWARD	54	//843.75Hz
@@ -125,11 +122,9 @@ void sound_remote(float* data){
 void processAudioData(int16_t *data, uint16_t num_samples){
 
 	/*
-	*
 	*	We get 160 samples per mic every 10ms
 	*	So we fill the samples buffers to reach
 	*	1024 samples, then we compute the FFTs.
-	*
 	*/
 
 	static uint16_t nb_samples = 0;
@@ -138,7 +133,6 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 
 	if(move){ //process audio only if in cross-road
 
-		//chprintf((BaseSequentialStream *) &SD3, "process son, move:%d\n", get_movement());
 		if(first_stop && !(move==dead_end)){
 			audio_displacement(forward_initial);
 			first_stop=0;
@@ -148,7 +142,6 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 		for(uint16_t i = 0 ; i < num_samples ; i+=4){
 			//construct an array of complex numbers. Put 0 to the imaginary part
 			micLeft_cmplx_input[nb_samples] = (float)data[i + MIC_LEFT];
-
 
 			nb_samples++;
 
@@ -214,43 +207,43 @@ float* get_audio_buffer_ptr(BUFFER_NAME_t name){
 void direction_enable(uint direction){
 	switch(direction)
 	{
-					case hallway:
-						forward = ENABLE;
-						backward = ENABLE;
-						break;
-					case l_turn:
-						left = ENABLE;
-						backward = ENABLE;
-						break;
-					case r_turn:
-						right = ENABLE;
-						backward = ENABLE;
-						break;
-					case l_r_turn:
-						right = ENABLE;
-						left = ENABLE;
-						backward = ENABLE;
-						break;
-					case f_l_turn:
-						left = ENABLE;
-						forward = ENABLE;
-						backward = ENABLE;
-						break;
-					case f_r_turn:
-						right = ENABLE;
-						forward = ENABLE;
-						backward = ENABLE;
-						break;
-					case f_l_r_turn:
-						left = ENABLE;
-						right = ENABLE;
-						forward = ENABLE;
-						backward = ENABLE;
-						break;
-					case dead_end:
-						backward = ENABLE;
-						deadend = ENABLE;
-						break;
+		case hallway:
+			forward = ENABLE;
+			backward = ENABLE;
+			break;
+		case l_turn:
+			left = ENABLE;
+			backward = ENABLE;
+			break;
+		case r_turn:
+			right = ENABLE;
+			backward = ENABLE;
+			break;
+		case l_r_turn:
+			right = ENABLE;
+			left = ENABLE;
+			backward = ENABLE;
+			break;
+		case f_l_turn:
+			left = ENABLE;
+			forward = ENABLE;
+			backward = ENABLE;
+			break;
+		case f_r_turn:
+			right = ENABLE;
+			forward = ENABLE;
+			backward = ENABLE;
+			break;
+		case f_l_r_turn:
+			left = ENABLE;
+			right = ENABLE;
+			forward = ENABLE;
+			backward = ENABLE;
+			break;
+		case dead_end:
+			backward = ENABLE;
+			deadend = ENABLE;
+			break;
 	}
 }
 
@@ -277,59 +270,54 @@ void audio_displacement(uint displacement){
 	switch(displacement)
 	{
 		case forward_move: //goes forward
-			left_motor_set_pos(-FRONT_LONG);
-			right_motor_set_speed(+SPEED_INI);
-			left_motor_set_speed(+SPEED_INI);
-			while (left_motor_get_pos()<0){;}
+			move_forward(-FRONT_LONG);
 			break;
 
 		case left_turn:
-			left_motor_set_pos(ROT);
-			right_motor_set_speed(+SPEED_INI/2);
-			left_motor_set_speed(-SPEED_INI/2);
-			while (left_motor_get_pos()>0){;}
-			left_motor_set_pos(-FRONT_LONG);
-			right_motor_set_speed(+SPEED_INI);
-			left_motor_set_speed(+SPEED_INI);
-			while (left_motor_get_pos()<0){;}
+			rotation(left_turn, ROT);
+			move_forward(-FRONT_LONG);
 			break;
 
 		case right_turn:
-			right_motor_set_pos(ROT);
-		    right_motor_set_speed(-SPEED_INI/2);
-		    left_motor_set_speed(+SPEED_INI/2);
-		    while (right_motor_get_pos()>0){;}
-			left_motor_set_pos(-FRONT_LONG);
-			right_motor_set_speed(+SPEED_INI);
-			left_motor_set_speed(+SPEED_INI);
-			while (left_motor_get_pos()<0){;}
+			rotation(right_turn, ROT);
+			move_forward(-FRONT_LONG);
 			break;
 
 		case backward_turn:
-			left_motor_set_pos(2*ROT);
-		     right_motor_set_speed(+SPEED_INI/2);
-		     left_motor_set_speed(-SPEED_INI/2);
-			while (left_motor_get_pos()>0){;}
-			left_motor_set_pos(-FRONT_LONG);
-			right_motor_set_speed(+SPEED_INI);
-			left_motor_set_speed(+SPEED_INI);
-			while (left_motor_get_pos()<0){;}
+			rotation(left_turn, 2*ROT);
+			move_forward(-FRONT_LONG);
 			break;
 
-	    case forward_initial: //for crossroad
-			left_motor_set_pos(-FRONT_SHORT);
-			right_motor_set_speed(+SPEED_INI);
-			left_motor_set_speed(+SPEED_INI);
-			while (left_motor_get_pos()<0){;}
+	    case forward_initial: //just before crossroad (goes in the middle)
+			move_forward(-FRONT_SHORT);
 			right_motor_set_speed(0);
 			left_motor_set_speed(0);
 			break;
 
 	    case dead_end_turn:
-	    	left_motor_set_pos(2*ROT);
-	    	right_motor_set_speed(+SPEED_INI/2);
-	    	left_motor_set_speed(-SPEED_INI/2);
-	    	while (left_motor_get_pos()>0){;}
+			rotation(left_turn, 2*ROT);
 	    	break;
 	}
+}
+
+void rotation(uint direction, uint rot_step){
+	if(direction == left_turn){
+		left_motor_set_pos(rot_step);
+		right_motor_set_speed(+SPEED_INI/2);
+		left_motor_set_speed(-SPEED_INI/2);
+		while (left_motor_get_pos()>0){;}
+	}
+	else if(direction == right_turn){
+		right_motor_set_pos(rot_step);
+	    right_motor_set_speed(-SPEED_INI/2);
+	    left_motor_set_speed(+SPEED_INI/2);
+	    while (right_motor_get_pos()>0){;}
+	}
+}
+
+void move_forward(uint forward_step){
+	left_motor_set_pos(forward_step);
+	right_motor_set_speed(+SPEED_INI);
+	left_motor_set_speed(+SPEED_INI);
+	while (left_motor_get_pos()<0){;}
 }

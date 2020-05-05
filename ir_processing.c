@@ -11,9 +11,9 @@
 #include <arm_math.h>
 
 
-#define CHECK	5		//Marge de verification avant assurer le croisement (en compare "CHECK" fois les get_prox)
+#define CHECK	5		//Verification margin before confirm the position state (we "CHECK" consecutive times the get_prox())
 
-#define MUR_PROCHE	280 //a mofifier selon environnement
+#define MUR_PROCHE	280 //to modify according to the environment
 
 static uint left_proche; static uint forward_proche; static uint right_proche;
 

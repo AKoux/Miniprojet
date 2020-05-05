@@ -31,12 +31,12 @@ void wait_send_to_computer(void);
 float* get_audio_buffer_ptr(BUFFER_NAME_t name);
 
 /*
-*	enable and disable the directions
+*	enable and disable the directions corresponding to the position
 */
 void direction_enable(uint direction);
 
 /*
-*	sets the LEDs
+*	sets the LEDs crossroad
 */
 void direction_led(void);
 
@@ -44,5 +44,9 @@ void direction_led(void);
 *	do the asked displacement
 */
 void audio_displacement(uint displacement);
+
+void rotation(uint direction, uint rot_step);
+
+void move_forward(uint forward_step);
 
 #endif /* AUDIO_PROCESSING_H */

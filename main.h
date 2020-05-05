@@ -24,11 +24,11 @@ enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
 
 enum MOVEMENT{hallway, l_turn, r_turn, l_r_turn, f_l_turn, f_r_turn, f_l_r_turn, dead_end}; //(l=left, r=right, f=forward) all the possible positions/crossroads.
 
-/** Robot wide IPC bus. */
+/** Robot wide IPC bus. **/
 
 extern messagebus_t bus;
 
-extern uint first_stop;
+extern uint first_stop; //for a initial advancement when arriving at a crossroad
 
 extern parameter_namespace_t parameter_root;
 
