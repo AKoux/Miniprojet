@@ -54,7 +54,7 @@ static THD_FUNCTION(PiRegulator, arg) {
 
 
     while(1){
-        if(!get_movement()){
+        if(!get_position()){
         	time = chVTGetSystemTime();
 
         	first_stop=1; //

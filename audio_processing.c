@@ -45,9 +45,9 @@ static float micLeft_output[FFT_SIZE];
 
 //MOVE STEPS
 
-#define FRONT_SHORT 250
-#define FRONT_LONG 400
-#define ROT 327 //experimentation: + 3 steps
+#define FRONT_SHORT 	350 //before audio choice
+#define FRONT_LONG 		450 //after audio choice
+#define ROT 			328 //experimentation: + 4 steps
 
 
 #define	DISABLE_DIR	0
@@ -57,8 +57,9 @@ static uint forward = 0;
 static uint left = 0;
 static uint right = 0;
 static uint backward = 0;
+static uint deadend = 0; //static values to translate get_position()
 
-enum DISPLACEMENT{forward_move, left_turn, right_turn, backward_turn, forward_initial};
+enum DISPLACEMENT{forward_move, left_turn, right_turn, backward_turn, forward_initial, dead_end_turn}; //all the possible displacement with audio
 /*
 *	Simple function used to detect the highest value in a buffer
 *	and to execute a motor command depending on it
@@ -66,10 +67,9 @@ enum DISPLACEMENT{forward_move, left_turn, right_turn, backward_turn, forward_in
 */
 void sound_remote(float* data){
 	float max_norm = MIN_VALUE_THRESHOLD;
-	int16_t max_norm_index = -1; 
-	//int16_t speed_ini = 600;
+	int16_t max_norm_index = -1;
 
-	direction_enable(get_movement());
+	direction_enable(get_position());
 	direction_led();
 	//search for the highest peak
 	for(uint16_t i = MIN_FREQ ; i <= MAX_FREQ ; i++){
@@ -78,7 +78,6 @@ void sound_remote(float* data){
 			max_norm_index = i;
 		}
 	}
-	//first_stop=1;
 	//go forward if want to and can
 	if(max_norm_index >= FREQ_FORWARD_L && max_norm_index <= FREQ_FORWARD_H){
 		if(forward){
@@ -99,7 +98,10 @@ void sound_remote(float* data){
 	}
 	//go backward if want to and can
 	else if(max_norm_index >= FREQ_BACKWARD_L && max_norm_index <= FREQ_BACKWARD_H){
-		if(backward){
+		if(deadend){
+			audio_displacement(dead_end_turn);
+		}
+		else if(backward){
 			audio_displacement(backward_turn);
 		}
 	}
@@ -108,7 +110,7 @@ void sound_remote(float* data){
 		right_motor_set_speed(0);
 		first_stop = 0;
 	}
-	right = DISABLE; left = DISABLE; forward = DISABLE; backward = DISABLE;
+	right = DISABLE; left = DISABLE; forward = DISABLE; backward = DISABLE; deadend = DISABLE;
 }
 
 /*
@@ -132,7 +134,7 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 
 	static uint16_t nb_samples = 0;
 	static uint8_t mustSend = 0;
-	uint move= get_movement();
+	uint move= get_position();
 
 	if(move){ //process audio only if in cross-road
 
@@ -141,7 +143,6 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 			audio_displacement(forward_initial);
 			first_stop=0;
 		}
-
 
 		//loop to fill the buffers
 		for(uint16_t i = 0 ; i < num_samples ; i+=4){
@@ -192,7 +193,6 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 			sound_remote(micLeft_output);
 		}
 	}
-
 }
 
 void wait_send_to_computer(void){
@@ -249,6 +249,7 @@ void direction_enable(uint direction){
 						break;
 					case dead_end:
 						backward = ENABLE;
+						deadend = ENABLE;
 						break;
 	}
 }
@@ -280,9 +281,6 @@ void audio_displacement(uint displacement){
 			right_motor_set_speed(+SPEED_INI);
 			left_motor_set_speed(+SPEED_INI);
 			while (left_motor_get_pos()<0){;}
-			right_motor_set_speed(0);
-			left_motor_set_speed(0);
-			//chThdYield();
 			break;
 
 		case left_turn:
@@ -294,8 +292,6 @@ void audio_displacement(uint displacement){
 			right_motor_set_speed(+SPEED_INI);
 			left_motor_set_speed(+SPEED_INI);
 			while (left_motor_get_pos()<0){;}
-			right_motor_set_speed(0);
-			left_motor_set_speed(0);
 			break;
 
 		case right_turn:
@@ -307,8 +303,6 @@ void audio_displacement(uint displacement){
 			right_motor_set_speed(+SPEED_INI);
 			left_motor_set_speed(+SPEED_INI);
 			while (left_motor_get_pos()<0){;}
-			right_motor_set_speed(0);
-			left_motor_set_speed(0);
 			break;
 
 		case backward_turn:
@@ -320,8 +314,6 @@ void audio_displacement(uint displacement){
 			right_motor_set_speed(+SPEED_INI);
 			left_motor_set_speed(+SPEED_INI);
 			while (left_motor_get_pos()<0){;}
-			right_motor_set_speed(0);
-			left_motor_set_speed(0);
 			break;
 
 	    case forward_initial: //for crossroad
@@ -332,5 +324,12 @@ void audio_displacement(uint displacement){
 			right_motor_set_speed(0);
 			left_motor_set_speed(0);
 			break;
+
+	    case dead_end_turn:
+	    	left_motor_set_pos(2*ROT);
+	    	right_motor_set_speed(+SPEED_INI/2);
+	    	left_motor_set_speed(-SPEED_INI/2);
+	    	while (left_motor_get_pos()>0){;}
+	    	break;
 	}
 }

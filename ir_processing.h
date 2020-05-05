@@ -8,9 +8,11 @@
 #ifndef IR_PROCESSING_H_
 #define IR_PROCESSING_H_
 
-//returns the movement conditions
-uint get_movement(void);
+//returns the position of the robot (which crossroad)
+uint get_position(void);
 //returns the difference between right and left side of the robot
 int get_side(void);
+//changes values used in get_position()
+void ir_condition(void);
 
 #endif /* IR_PROCESSING_H_ */

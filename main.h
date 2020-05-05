@@ -9,20 +9,21 @@ extern "C" {
 #include "msgbus/messagebus.h"
 #include "parameter/parameter.h"
 
-//constants for the differents parts of the miniproject
+//constants for the different parts of the lil' project
 
 enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
 #define ERROR_THRESHOLD			40.0f
 #define ROTATION_THRESHOLD		10
 #define KP						0.04f
-#define KI 						0.01f	//must not be zero
+//#define KI 						0.01f	//must not be zero
 #define SPEED_INI				400
-#define MAX_SPPED_CORR 			(SPEED_INI/8)
+#define MAX_SPPED_CORR 			(SPEED_INI/8)	//experimental
 
 #define ON						1
 #define OFF						0
 
-enum MOVEMENT{hallway, l_turn, r_turn, l_r_turn, f_l_turn, f_r_turn, f_l_r_turn, dead_end}; //(l=left, r=right, f=forward)
+enum MOVEMENT{hallway, l_turn, r_turn, l_r_turn, f_l_turn, f_r_turn, f_l_r_turn, dead_end}; //(l=left, r=right, f=forward) all the possible positions/crossroads.
+
 /** Robot wide IPC bus. */
 
 extern messagebus_t bus;
