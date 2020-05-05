@@ -21,14 +21,19 @@
 #include <arm_math.h>
 
 
+
+
+//comment for only microphone movement
+#define AUTO_MOVEMENT
+
 //global declaration for proximity.h
 messagebus_t bus;
 MUTEX_DECL(bus_lock); // @suppress("Field cannot be resolved")
 CONDVAR_DECL(bus_condvar);
 
-//comment for only microphone movement
-#define AUTO_MOVEMENT
+//global var, for first move in intersec
 
+uint first_stop;
 
 static void serial_start(void)
 {

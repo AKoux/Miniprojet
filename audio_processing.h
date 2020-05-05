@@ -36,6 +36,11 @@ float* get_audio_buffer_ptr(BUFFER_NAME_t name);
 void direction_enable(uint direction);
 
 /*
+*	sets the LEDs
+*/
+void direction_led(void);
+
+/*
 *	do the asked displacement
 */
 void audio_displacement(uint displacement);

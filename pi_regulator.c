@@ -16,36 +16,26 @@
 int16_t pi_regulator(float difference){
 
 	float error = 0;
+	static float last_error = 0;
 	float speed = 0;
 
-	static float sum_error = 0;
+	last_error = error;
 
 	error = difference;
 
-	//disables the PI regulator if the error is to small
+	//disables the regulator if the error is to small
 	//this avoids to always move as we cannot exactly be where we want and 
 	//the camera is a bit noisy
 	if(fabs(error) < ERROR_THRESHOLD){
 		return 0;
 	}
 
-	sum_error += error;
+	speed = KP * (0.8 * error + 0.2 * last_error);
 
-	//we set a maximum and a minimum for the sum to avoid an uncontrolled growth
-	if(sum_error > MAX_SUM_ERROR){
-		sum_error = MAX_SUM_ERROR;
-	}else if(sum_error < -MAX_SUM_ERROR){
-		sum_error = -MAX_SUM_ERROR;
-	}
 
-	/*if(fabs(error) < 300){
-			sum_error=0 ;
-		}*/
-	speed = KP * error;
-	//speed = KP * error + KI * sum_error;
-
-	/*chprintf((BaseSequentialStream *) &SD3, "error_%f\n", error);
-	chprintf((BaseSequentialStream *) &SD3, "sum_error_%f\n", sum_error);
+	/*
+	chprintf((BaseSequentialStream *) &SD3, "error_%f\n", error);
+	chprintf((BaseSequentialStream *) &SD3, "sum_error_%f\n", last_error);
 	chprintf((BaseSequentialStream *) &SD3, "correction_%f\n", speed);
 	*/
     return (int16_t)speed;
@@ -61,57 +51,30 @@ static THD_FUNCTION(PiRegulator, arg) {
 
     int16_t speed_correction = 0;
 
-	uint move; uint first_stop=1;
+
 
     while(1){
-        time = chVTGetSystemTime();
+        if(!get_movement()){
+        	time = chVTGetSystemTime();
 
-       //100Hz
-       // chThdSleepUntilWindowed(time, time + MS2ST(10));
-        move=get_movement();
-        chprintf((BaseSequentialStream *) &SD3, "pi_regulaor thread\n");
+        	first_stop=1; //
+        	//chprintf((BaseSequentialStream *) &SD3, "pi_regulaor thread\n");
 
-        if(!move){
-        	first_stop=1;
         	clear_leds();
 
         	//computes a correction factor to let the robot rotate to be in front of the line
         	speed_correction = pi_regulator(get_side());
 
-        	/*//if the line is nearly in front of the camera, don't rotate
-        	if(abs(speed_correction) < ROTATION_THRESHOLD){
-        	speed_correction = 0;
-        	  }
-        	  */
-        	if(abs(speed_correction) > 200){
-        		speed_correction = 200;
+        	if(abs(speed_correction) > MAX_SPPED_CORR){
+        		speed_correction = MAX_SPPED_CORR;
         	    }
-        	right_motor_set_speed(SPEED_INI  + ROTATION_COEFF * speed_correction);
-        	left_motor_set_speed(SPEED_INI - ROTATION_COEFF * speed_correction);
+        	right_motor_set_speed(SPEED_INI  + speed_correction);
+        	left_motor_set_speed(SPEED_INI - speed_correction);
+        	//100Hz
+        	chThdSleepUntilWindowed(time, time + MS2ST(10));
 
-			chprintf((BaseSequentialStream *) &SD3, "move actif%d\n", 5);
+        	//chThdYield();
         }
-        else if(move && first_stop){
-        	chprintf((BaseSequentialStream *) &SD3, "move non actif%d\n", 5);
-			first_stop=0;
-        	//left_motor_set_pos(-600);
-			right_motor_set_speed(+SPEED_INI);
-			left_motor_set_speed(+SPEED_INI);
-			chThdSleepMilliseconds(700);
-			/*while (left_motor_get_pos()<0){
-					;
-			}
-			//chThdSleepMilliseconds(500);*/
-        }
-        else{
-			right_motor_set_speed(0);
-			left_motor_set_speed(0);
-        }
-        chThdSleepUntilWindowed(time, time + MS2ST(10));
-
-        chThdYield();
-       //chprintf((BaseSequentialStream *) &SD3, "Position_%d\n", get_movement());
-
     }
 
 }

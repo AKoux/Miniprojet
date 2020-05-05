@@ -1,0 +1,78 @@
+[33mcommit 607ce5325b72c4613c879184a236659c0fc0d1b4[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: koux <alexander.koux@epfl.ch>
+Date:   Mon May 4 09:01:28 2020 +0200
+
+    avant ajout leds
+
+[33mcommit 2a472e2b4b700e71df3e793c346213fd952898cb[m
+Author: koux <alexander.koux@epfl.ch>
+Date:   Sun May 3 15:55:22 2020 +0200
+
+    main cleaning
+
+[33mcommit 1a4aabb35410790f511f7260da5350aa18add48b[m
+Author: koux <alexander.koux@epfl.ch>
+Date:   Thu Apr 30 20:51:48 2020 +0200
+
+    test association pi et audio_process
+
+[33mcommit a484510e18acb81782eb4b50311ff111975e8b5a[m
+Author: koux <alexander.koux@epfl.ch>
+Date:   Thu Apr 30 19:03:12 2020 +0200
+
+    audio_processing improvement and implementation
+
+[33mcommit e45d73f3ac22c0749613376fe90ec2a3ed7911b6[m
+Author: koux <alexander.koux@epfl.ch>
+Date:   Thu Apr 30 17:59:19 2020 +0200
+
+    added the audio processing
+
+[33mcommit fc6afbc10f59f9659a9d87638e4ae07395ca7737[m
+Author: koux <alexander.koux@epfl.ch>
+Date:   Thu Apr 30 16:05:25 2020 +0200
+
+    sleep ajouté
+
+[33mcommit a89ad869616c08536ff9705ac8e61289034d94e5[m
+Merge: 5bd0669 4ab7cdc
+Author: koux <alexander.koux@epfl.ch>
+Date:   Thu Apr 30 15:33:32 2020 +0200
+
+    Merge branch 'master' of https://github.com/AKoux/Miniprojet
+
+[33mcommit 5bd06694aefca69397440b64115ed63e6ede3ef0[m
+Author: koux <alexander.koux@epfl.ch>
+Date:   Thu Apr 30 15:33:23 2020 +0200
+
+    movement gestion
+
+[33mcommit 4ab7cdcfd4494a42ff70489a1b383a878e4fa1d6[m
+Author: yortholt <alexandre.yortholt@epfl.ch>
+Date:   Thu Apr 30 15:31:41 2020 +0200
+
+    yield main
+
+[33mcommit 19bda76673fb9529c6bc495db7aedb1c71e6e5b8[m
+Author: yortholt <alexandre.yortholt@epfl.ch>
+Date:   Thu Apr 30 15:24:53 2020 +0200
+
+    amélioration mouvement
+
+[33mcommit 11c2c9aff557859429fbb9b3dbbd6467f5531fe7[m
+Author: koux <alexander.koux@epfl.ch>
+Date:   Thu Apr 30 15:24:37 2020 +0200
+
+    petite modif thread
+
+[33mcommit 87658392568382c75ba0eaba518239ab38615922[m
+Author: koux <alexander.koux@epfl.ch>
+Date:   Wed Apr 29 16:30:24 2020 +0200
+
+    changement val constantes
+
+[33mcommit c0b0c52d7c72c73aa18e00c923eedb04c5348864[m
+Author: koux <alexander.koux@epfl.ch>
+Date:   Wed Apr 29 15:52:02 2020 +0200
+
+    premier commit

@@ -137,6 +137,7 @@ build/obj/audio_processing.o: audio_processing.c \
  ../../lib/e-puck2_main-processor/ChibiOS//os/hal/lib/streams/chprintf.h \
  c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\lib\gcc\arm-none-eabi\7.2.1\include\stdarg.h \
  ../../lib/e-puck2_main-processor/src/motors.h \
+ ../../lib/e-puck2_main-processor/src/leds.h \
  ../../lib/e-puck2_main-processor/src/audio/microphone.h \
  ../../lib/e-puck2_main-processor/src/audio/mp45dt02_processing.h \
  audio_processing.h ir_processing.h communications.h fft.h \
@@ -427,6 +428,8 @@ c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-20
 c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\lib\gcc\arm-none-eabi\7.2.1\include\stdarg.h:
 
 ../../lib/e-puck2_main-processor/src/motors.h:
+
+../../lib/e-puck2_main-processor/src/leds.h:
 
 ../../lib/e-puck2_main-processor/src/audio/microphone.h:
 

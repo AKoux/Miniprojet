@@ -137,7 +137,8 @@ build/obj/pi_regulator.o: pi_regulator.c \
  c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\stdlib.h \
  c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\machine\stdlib.h \
  c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\alloca.h \
- ../../lib/e-puck2_main-processor/src/motors.h audio_processing.h \
+ ../../lib/e-puck2_main-processor/src/motors.h \
+ ../../lib/e-puck2_main-processor/src/leds.h audio_processing.h \
  pi_regulator.h ir_processing.h
 
 ../../lib/e-puck2_main-processor/ChibiOS//os/rt/include/ch.h:
@@ -421,6 +422,8 @@ c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-20
 c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\alloca.h:
 
 ../../lib/e-puck2_main-processor/src/motors.h:
+
+../../lib/e-puck2_main-processor/src/leds.h:
 
 audio_processing.h:
 

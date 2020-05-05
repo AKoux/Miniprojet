@@ -12,21 +12,22 @@ extern "C" {
 //constants for the differents parts of the miniproject
 
 enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
-#define ERROR_THRESHOLD			100.0f
+#define ERROR_THRESHOLD			40.0f
 #define ROTATION_THRESHOLD		10
-#define ROTATION_COEFF			1
-#define KP						0.1f
+#define KP						0.04f
 #define KI 						0.01f	//must not be zero
-#define MAX_SUM_ERROR 			(MOTOR_SPEED_LIMIT/KI)
-#define SPEED_INI				600
+#define SPEED_INI				400
+#define MAX_SPPED_CORR 			(SPEED_INI/8)
+
+#define ON						1
+#define OFF						0
+
+enum MOVEMENT{hallway, l_turn, r_turn, l_r_turn, f_l_turn, f_r_turn, f_l_r_turn, dead_end}; //(l=left, r=right, f=forward)
 /** Robot wide IPC bus. */
 
-/*#define LED1     	GPIOD, 5
-#define LED3     	GPIOD, 6
-#define LED5     	GPIOD, 10
-#define LED7     	GPIOD, 11*/
-
 extern messagebus_t bus;
+
+extern uint first_stop;
 
 extern parameter_namespace_t parameter_root;
 
