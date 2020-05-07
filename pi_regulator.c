@@ -16,21 +16,24 @@ int16_t pi_regulator(float difference){
 
 	float error = 0;
 	static float last_error = 0;
+	static float derivative = 0;
+	static float integral = 0;
 	float speed = 0;
 
-	last_error = error;
-
 	error = difference;
-
-	//disables the regulator if the error is to small
+		//disables the regulator if the error is to small
 	//this avoids to always move as we cannot exactly be where we want and 
 	//the camera is a bit noisy
 	if(fabs(error) < ERROR_THRESHOLD){
 		return 0;
 	}
 
-	speed = KP * (ERROR_COEF * error + LAST_ERROR_COEF * last_error);
+	derivative = error - last_error;
+	integral = integral + error;
+	last_error = error;
 
+	//speed = KP * (ERROR_COEF * error + LAST_ERROR_COEF * last_error);
+	speed = KP * error + KI * integral + KD * derivative;
     return (int16_t)speed;
 }
 
@@ -59,15 +62,17 @@ static THD_FUNCTION(PiRegulator, arg) {
 
         	if(speed_correction > MAX_SPPED_CORR){
         		speed_correction = MAX_SPPED_CORR;
+        		chprintf((BaseSequentialStream *) &SD3," aess\n");
         	    }
         	if(speed_correction < -MAX_SPPED_CORR){
         		speed_correction = -MAX_SPPED_CORR;
+        		chprintf((BaseSequentialStream *) &SD3," aess\n");
         	    }
 
         	right_motor_set_speed(SPEED_INI  + speed_correction);
         	left_motor_set_speed(SPEED_INI - speed_correction);
         	//100Hz
-        	chThdSleepUntilWindowed(time, time + MS2ST(1));
+        	chThdSleepUntilWindowed(time, time + MS2ST(10));
 
 
         }

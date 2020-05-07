@@ -19,10 +19,6 @@
 #include <fft.h>
 #include <arm_math.h>
 
-
-//comment for only microphone movement
-#define AUTO_MOVEMENT
-
 //global declaration for proximity.h
 messagebus_t bus;
 MUTEX_DECL(bus_lock); // @suppress("Field cannot be resolved")
@@ -63,9 +59,8 @@ int main(void)
     messagebus_init(&bus, &bus_lock, &bus_condvar);
 
     /*--------------------------stars the thread----------------------------------*/
-#ifdef AUTO_MOVEMENT
+
     pi_regulator_start();
-#endif /*PI*/
     proximity_start();
     //starts the microphones processing thread.
     //it calls the callback given in parameter when samples are ready
@@ -83,7 +78,6 @@ int main(void)
     	ess=1;
     	chprintf((BaseSequentialStream *) &SD3," bess = %d us\n", ess);*/
 
-        //sleep
     	time = chVTGetSystemTime();
     	chThdSleepUntilWindowed(time, time + MS2ST(100));
     }

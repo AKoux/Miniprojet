@@ -10,10 +10,12 @@
 //constants for the different parts of the lil' project
 
 enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
-#define ERROR_THRESHOLD			15.f			//experimental
-#define KP						1.f			//experimental
+#define ERROR_THRESHOLD			20.f			//experimental
+#define KP						0.7f			//experimental
+#define KI						0.0001f			//experimental
+#define KD						20.f			//experimental
 #define SPEED_INI				400				//choice
-#define MAX_SPPED_CORR 			(SPEED_INI/16)	//experimental
+#define MAX_SPPED_CORR 			(SPEED_INI/12)	//experimental
 
 #define ON						1
 #define OFF						0
