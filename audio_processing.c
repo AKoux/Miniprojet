@@ -9,12 +9,9 @@
 #include <audio/microphone.h>
 #include <audio_processing.h>
 #include <ir_processing.h>
-#include <communications.h>
 #include <fft.h>
 #include <arm_math.h>
 
-//semaphore
-static BSEMAPHORE_DECL(sendToComputer_sem, TRUE);
 
 //2 times FFT_SIZE because these arrays contain complex numbers (real + imaginary)
 static float micLeft_cmplx_input[2 * FFT_SIZE];
@@ -44,11 +41,13 @@ static float micLeft_output[FFT_SIZE];
 
 #define FRONT_SHORT 	350 //before audio choice
 #define FRONT_LONG 		450 //after audio choice
-#define ROT 			328 //experimentation: + 4 steps
+#define ROT 			325 //experimentation: + 1 steps
 
 
 #define	DISABLE_DIR	0
 #define	ENABLE_DIR	1
+
+
 
 static uint forward = 0;
 static uint left = 0;
@@ -105,9 +104,9 @@ void sound_remote(float* data){
 	else{
 		left_motor_set_speed(0);
 		right_motor_set_speed(0);
-		first_stop = 0;
+		first_stop = FS_DONE;
 	}
-	right = DISABLE; left = DISABLE; forward = DISABLE; backward = DISABLE; deadend = DISABLE;
+	right = DISABLE_DIR; left = DISABLE_DIR; forward = DISABLE_DIR; backward = DISABLE_DIR; deadend = DISABLE_DIR;
 }
 
 /*
@@ -128,14 +127,13 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 	*/
 
 	static uint16_t nb_samples = 0;
-	static uint8_t mustSend = 0;
-	uint move= get_position();
+	uint move = get_position();
 
 	if(move){ //process audio only if in cross-road
 
 		if(first_stop && !(move==dead_end)){
 			audio_displacement(forward_initial);
-			first_stop=0;
+			first_stop = FS_DONE;
 		}
 
 		//loop to fill the buffers
@@ -173,24 +171,16 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 			arm_cmplx_mag_f32(micLeft_cmplx_input, micLeft_output, FFT_SIZE);
 
 
-			//sends only one FFT result over 10 for 1 mic to not flood the computer
-			//sends to UART3
-			if(mustSend > 8){
-				//signals to send the result to the computer
-				chBSemSignal(&sendToComputer_sem);
-				mustSend = 0;
-			}
+
 			nb_samples = 0;
-			mustSend++;
+
 
 			sound_remote(micLeft_output);
 		}
 	}
 }
 
-void wait_send_to_computer(void){
-	chBSemWait(&sendToComputer_sem);
-}
+
 
 float* get_audio_buffer_ptr(BUFFER_NAME_t name){
 	if(name == LEFT_CMPLX_INPUT){
@@ -208,41 +198,41 @@ void direction_enable(uint direction){
 	switch(direction)
 	{
 		case hallway:
-			forward = ENABLE;
-			backward = ENABLE;
+			forward = ENABLE_DIR;
+			backward = ENABLE_DIR;
 			break;
 		case l_turn:
-			left = ENABLE;
-			backward = ENABLE;
+			left = ENABLE_DIR;
+			backward = ENABLE_DIR;
 			break;
 		case r_turn:
-			right = ENABLE;
-			backward = ENABLE;
+			right = ENABLE_DIR;
+			backward = ENABLE_DIR;
 			break;
 		case l_r_turn:
-			right = ENABLE;
-			left = ENABLE;
-			backward = ENABLE;
+			right = ENABLE_DIR;
+			left = ENABLE_DIR;
+			backward = ENABLE_DIR;
 			break;
 		case f_l_turn:
-			left = ENABLE;
-			forward = ENABLE;
-			backward = ENABLE;
+			left = ENABLE_DIR;
+			forward = ENABLE_DIR;
+			backward = ENABLE_DIR;
 			break;
 		case f_r_turn:
-			right = ENABLE;
-			forward = ENABLE;
-			backward = ENABLE;
+			right = ENABLE_DIR;
+			forward = ENABLE_DIR;
+			backward = ENABLE_DIR;
 			break;
 		case f_l_r_turn:
-			left = ENABLE;
-			right = ENABLE;
-			forward = ENABLE;
-			backward = ENABLE;
+			left = ENABLE_DIR;
+			right = ENABLE_DIR;
+			forward = ENABLE_DIR;
+			backward = ENABLE_DIR;
 			break;
 		case dead_end:
-			backward = ENABLE;
-			deadend = ENABLE;
+			backward = ENABLE_DIR;
+			deadend = ENABLE_DIR;
 			break;
 	}
 }
@@ -251,16 +241,16 @@ void direction_led(void){
 
 	clear_leds();
 
-	if(forward==DISABLE){
+	if(forward==DISABLE_DIR){
     	set_led(LED1, ON);
 	}
-	if(left==DISABLE){
+	if(left==DISABLE_DIR){
     	set_led(LED7, ON);
 	}
-	if(right==DISABLE){
+	if(right==DISABLE_DIR){
     	set_led(LED3, ON);
 	}
-	if(backward==DISABLE){
+	if(backward==DISABLE_DIR){
     	set_led(LED5, ON);
 	}
 }
@@ -306,12 +296,16 @@ void rotation(uint direction, uint rot_step){
 		right_motor_set_speed(+SPEED_INI/2);
 		left_motor_set_speed(-SPEED_INI/2);
 		while (left_motor_get_pos()>0){;}
+		right_motor_set_speed(0);
+		left_motor_set_speed(0);
 	}
 	else if(direction == right_turn){
 		right_motor_set_pos(rot_step);
 	    right_motor_set_speed(-SPEED_INI/2);
 	    left_motor_set_speed(+SPEED_INI/2);
 	    while (right_motor_get_pos()>0){;}
+	    right_motor_set_speed(0);
+	    left_motor_set_speed(0);
 	}
 }
 

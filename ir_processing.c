@@ -6,7 +6,6 @@
 
 
 #include <sensors/proximity.h>
-//#include <audio_processing.h>
 #include <ir_processing.h>
 #include <arm_math.h>
 

@@ -5,7 +5,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "memory_protection.h"
-#include <usbcfg.h>
+#include <usbcfg.h> //debug
 #include <main.h>
 #include <chprintf.h>
 #include <motors.h>
@@ -17,11 +17,7 @@
 #include <ir_processing.h>
 #include <pi_regulator.h>
 #include <fft.h>
-#include <communications.h>
 #include <arm_math.h>
-#include <stdbool.h>
-//#include <bool.h>
-
 
 
 //comment for only microphone movement
@@ -32,10 +28,10 @@ messagebus_t bus;
 MUTEX_DECL(bus_lock); // @suppress("Field cannot be resolved")
 CONDVAR_DECL(bus_condvar);
 
-//global var, for first move in intersec
+//global var, for first move in intersection
 
-uint first_stop;
-bool essssssss;
+uint8_t first_stop;
+bool ess;
 
 static void serial_start(void)
 {
@@ -45,25 +41,9 @@ static void serial_start(void)
 	    0,
 	    0,
 	};
-
 	sdStart(&SD3, &ser_cfg); // UART3.
 }
 
-static void timer12_start(void){
-    //General Purpose Timer configuration   
-    //timer 12 is a 16 bit timer so we can measure time
-    //to about 65ms with a 1Mhz counter
-    static const GPTConfig gpt12cfg = {
-        1000000,        /* 1MHz timer clock in order to measure uS.*/
-        NULL,           /* Timer callback.*/
-        0,
-        0
-    };
-
-    gptStart(&GPTD12, &gpt12cfg);
-    //let the timer count to max value
-    gptStartContinuous(&GPTD12, 0xFFFF);
-}
 
 int main(void)
 {
@@ -77,8 +57,6 @@ int main(void)
     serial_start();
     //starts the USB communication
     usb_start();
-    //starts timer 12
-    timer12_start();
     //inits the motors
     motors_init();
     //start the msgbus
@@ -94,23 +72,20 @@ int main(void)
     mic_start(&processAudioData);
 
 
+    systime_t time;
 
     /* Infinite loop. */
     while (1) {
 
-    	/*
-        measure time to do stuff
-              	  	chSysLock();
-                    //reset the timer counter
-                    GPTD12.tim->CNT = 0;
 
-                  XXXXXXXXXXXXXXXX
+    	/*ess=0;
+    	chprintf((BaseSequentialStream *) &SD3," aess = %d us\n", ess);
+    	ess=1;
+    	chprintf((BaseSequentialStream *) &SD3," bess = %d us\n", ess);*/
 
-                    time_mag = GPTD12.tim->CNT;
-                    chSysUnlock();
-        chprintf((BaseSequentialStream *) &SD3, time magnitude = %d us\n", time_mag);
-        */
-        chThdYield();
+        //sleep
+    	time = chVTGetSystemTime();
+    	chThdSleepUntilWindowed(time, time + MS2ST(100));
     }
 }
 
