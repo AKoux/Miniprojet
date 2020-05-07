@@ -39,7 +39,7 @@ static float micLeft_output[FFT_SIZE];
 
 //MOVE STEPS
 
-#define FRONT_SHORT 	350 //before audio choice
+#define FRONT_SHORT 	340 //before audio choice
 #define FRONT_LONG 		450 //after audio choice
 #define ROT 			325 //experimentation: + 1 steps
 
@@ -48,12 +48,12 @@ static float micLeft_output[FFT_SIZE];
 #define	ENABLE_DIR	1
 
 
-
-static uint forward = 0;
-static uint left = 0;
-static uint right = 0;
-static uint backward = 0;
-static uint deadend = 0; //static values to translate get_position()
+//static values to translate get_position()
+static uint8_t forward = 0;
+static uint8_t left = 0;
+static uint8_t right = 0;
+static uint8_t backward = 0;
+static uint8_t deadend = 0;
 
 enum DISPLACEMENT{forward_move, left_turn, right_turn, backward_turn, forward_initial, dead_end_turn}; //all the possible displacement with audio
 /*
@@ -76,8 +76,12 @@ void sound_remote(float* data){
 	}
 	//go forward if want to and can
 	if(max_norm_index >= FREQ_FORWARD_L && max_norm_index <= FREQ_FORWARD_H){
-		if(forward){
+
+		if(forward && program_started){
 			audio_displacement(forward_move);
+		}
+		else{
+			program_started = ON; //first frequency has been produced to lunch the program.
 		}
 	}
 	//turn left if want to and can
@@ -97,7 +101,7 @@ void sound_remote(float* data){
 		if(deadend){
 			audio_displacement(dead_end_turn);
 		}
-		else if(backward){
+		else if(backward && !program_started){
 			audio_displacement(backward_turn);
 		}
 	}
@@ -127,9 +131,9 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 	*/
 
 	static uint16_t nb_samples = 0;
-	uint move = get_position();
+	uint8_t move = get_position();
 
-	if(move){ //process audio only if in cross-road
+	if(move || !program_started){ //process audio only if in cross-road
 
 		if(first_stop && !(move==dead_end)){
 			audio_displacement(forward_initial);

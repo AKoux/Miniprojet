@@ -27,7 +27,7 @@ CONDVAR_DECL(bus_condvar);
 //global var, for first move in intersection
 
 uint8_t first_stop;
-bool ess;
+uint8_t program_started = 0;
 
 static void serial_start(void)
 {
@@ -71,12 +71,6 @@ int main(void)
 
     /* Infinite loop. */
     while (1) {
-
-
-    	/*ess=0;
-    	chprintf((BaseSequentialStream *) &SD3," aess = %d us\n", ess);
-    	ess=1;
-    	chprintf((BaseSequentialStream *) &SD3," bess = %d us\n", ess);*/
 
     	time = chVTGetSystemTime();
     	chThdSleepUntilWindowed(time, time + MS2ST(100));

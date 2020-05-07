@@ -21,8 +21,8 @@ static uint left_proche; static uint forward_proche; static uint right_proche;
 //returns the position/crossroad
 uint get_position(void){
 
-	static uint position = 0;
-	static uint i=0,j=0,l=0,k=0,m=0,n=0,o=0,p=0;
+	static uint8_t position = 0;
+	static uint8_t i=0,j=0,l=0,k=0,m=0,n=0,o=0,p=0; //simple counters
 
     ir_condition();
 
@@ -93,15 +93,17 @@ int get_side(void){
 
 //changes values used in get_position()
 void ir_condition(void){
-	static uint IR1=0; static uint IR8=0; static uint IR3=0; static uint IR6=0; static float IR_avant;
+	static uint16_t IR1=0; static uint16_t IR8=0; static uint16_t IR3=0;
+	static uint16_t IR6=0; static float IR_avant;
+
 	left_proche = 0;
 	right_proche = 0;
 	forward_proche = 0;
 
     IR8 = get_prox(ir8);
     IR1 = get_prox(ir1);
-    IR3 = get_prox(ir3); //right
-    IR6 = get_prox(ir6); //left
+    IR3 = get_prox(ir3); 	 //right
+    IR6 = get_prox(ir6); 	 //left
     IR_avant = (IR1+IR8)/2.; //moyenne des deux capteurs avants
 
 

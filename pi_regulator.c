@@ -14,14 +14,14 @@
 //simple PI regulator implementation
 int16_t pi_regulator(float difference){
 
-	float error = 0;
-	static float last_error = 0;
-	static float derivative = 0;
-	static float integral = 0;
-	float speed = 0;
+	int16_t error = 0;
+	static int16_t last_error = 0;
+	static int16_t derivative = 0;
+	static int16_t integral = 0;
+	int16_t speed = 0;
 
 	error = difference;
-		//disables the regulator if the error is to small
+	//disables the regulator if the error is to small
 	//this avoids to always move as we cannot exactly be where we want and 
 	//the camera is a bit noisy
 	if(fabs(error) < ERROR_THRESHOLD){
@@ -50,7 +50,7 @@ static THD_FUNCTION(PiRegulator, arg) {
 
 
     while(1){
-        if(!get_position()){
+        if(!get_position() && program_started){
         	time = chVTGetSystemTime();
 
         	first_stop= FS_TO_BE_DONE;
