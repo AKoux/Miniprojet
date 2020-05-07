@@ -19,7 +19,8 @@
 #include <fft.h>
 #include <communications.h>
 #include <arm_math.h>
-
+#include <stdbool.h>
+//#include <bool.h>
 
 
 
@@ -34,6 +35,7 @@ CONDVAR_DECL(bus_condvar);
 //global var, for first move in intersec
 
 uint first_stop;
+bool essssssss;
 
 static void serial_start(void)
 {

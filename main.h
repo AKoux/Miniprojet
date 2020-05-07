@@ -15,7 +15,6 @@ enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
 #define ERROR_THRESHOLD			40.0f
 #define ROTATION_THRESHOLD		10
 #define KP						0.04f
-//#define KI 						0.01f	//must not be zero
 #define SPEED_INI				400
 #define MAX_SPPED_CORR 			(SPEED_INI/8)	//experimental
 

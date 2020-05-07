@@ -56,21 +56,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  17 .comment      0000015e  00000000  00000000  000315c9  2**0
                   CONTENTS, READONLY
- 18 .debug_info   000f19d8  00000000  00000000  00031727  2**0
+ 18 .debug_info   000f19e9  00000000  00000000  00031727  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .debug_abbrev 000105de  00000000  00000000  001230ff  2**0
+ 19 .debug_abbrev 000105de  00000000  00000000  00123110  2**0
                   CONTENTS, READONLY, DEBUGGING
- 20 .debug_aranges 00001b70  00000000  00000000  001336e0  2**3
+ 20 .debug_aranges 00001b70  00000000  00000000  001336f0  2**3
                   CONTENTS, READONLY, DEBUGGING
- 21 .debug_ranges 00003ad8  00000000  00000000  00135250  2**0
+ 21 .debug_ranges 00003ad8  00000000  00000000  00135260  2**0
                   CONTENTS, READONLY, DEBUGGING
- 22 .debug_line   0002b727  00000000  00000000  00138d28  2**0
+ 22 .debug_line   0002b727  00000000  00000000  00138d38  2**0
                   CONTENTS, READONLY, DEBUGGING
- 23 .debug_str    00008d5c  00000000  00000000  0016444f  2**0
+ 23 .debug_str    00008d66  00000000  00000000  0016445f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 24 .debug_frame  0000802c  00000000  00000000  0016d1ac  2**2
+ 24 .debug_frame  0000802c  00000000  00000000  0016d1c8  2**2
                   CONTENTS, READONLY, DEBUGGING
- 25 .debug_loc    000166c4  00000000  00000000  001751d8  2**0
+ 25 .debug_loc    000166c4  00000000  00000000  001751f4  2**0
                   CONTENTS, READONLY, DEBUGGING
 SYMBOL TABLE:
 08000000 l    d  startup	00000000 startup
@@ -131,8 +131,8 @@ e000ed04 l       *ABS*	00000000 SCB_ICSR
 00000000 l    df *ABS*	00000000 lib_a-memchr.o
 00000000 l    df *ABS*	00000000 _arm_unorddf2.o
 00000000 l    df *ABS*	00000000 main.c
-20000b20 l     O .data	0000000c ser_cfg.14992
-08011ca0 l     O .text	00000010 gpt12cfg.14996
+20000b20 l     O .data	0000000c ser_cfg.14993
+08011ca0 l     O .text	00000010 gpt12cfg.14997
 00000000 l    df *ABS*	00000000 audio_processing.c
 080021d0 l     F .text	00000038 rotation.part.2
 200035bc l     O .bss	00001000 micLeft_output
