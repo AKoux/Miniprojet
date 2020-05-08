@@ -10,8 +10,10 @@
 
 //returns the position of the robot (which crossroad)
 uint get_position(void);
+
 //returns the difference between right and left side of the robot
 int get_side(void);
+
 //updates values used in get_position()
 void ir_condition(void);
 

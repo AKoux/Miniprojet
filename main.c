@@ -11,23 +11,21 @@
 #include <motors.h>
 #include <audio/microphone.h>
 #include <sensors/proximity.h>
-#include "leds.h"
 
 #include <audio_processing.h>
 #include <ir_processing.h>
 #include <pid_regulator.h>
 #include <fft.h>
-#include <arm_math.h>
 
 //global declaration for proximity.h
 messagebus_t bus;
 MUTEX_DECL(bus_lock); // @suppress("Field cannot be resolved")
 CONDVAR_DECL(bus_condvar);
 
-//global var, for first move in intersection
+//global variables, for first move in intersection and launching
 
-uint8_t first_stop;
-uint8_t program_started = 0;
+static uint8_t first_stop = FS_TO_BE_DONE;	//for a preliminary advancement when arriving at a crossroad
+static uint8_t program_started = OFF;		//wait for first order when placing robot in maze
 
 static void serial_start(void)
 {
@@ -85,3 +83,34 @@ void __stack_chk_fail(void)
     chSysHalt("Stack smashing detected");
 }
 
+/*-------------functions to set and get state variables--------------*/
+
+int get_first_stop(void){
+
+	return first_stop;
+}
+
+int get_program_started(void){
+
+	return program_started;
+}
+
+void set_first_stop(uint8_t switching){
+
+	if(switching){
+		first_stop = FS_TO_BE_DONE;
+	}
+	else{
+		first_stop = FS_DONE;
+	}
+}
+
+void set_program_started(uint8_t switching){
+
+	if(switching){
+		program_started = ON;
+	}
+	else{
+		program_started = OFF;
+	}
+}

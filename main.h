@@ -30,9 +30,15 @@ enum POSITION{hallway, l_turn, r_turn, l_r_turn, f_l_turn, f_r_turn, f_l_r_turn,
 
 extern messagebus_t bus;
 
-extern uint8_t first_stop; 		//for a preliminary advancement when arriving at a crossroad
-extern uint8_t program_started; //wait for first order when placing robot in maze
-
 extern parameter_namespace_t parameter_root;
+
+/*------------------------functions to set and get state variables----------*/
+int get_first_stop(void);
+
+int get_program_started(void);
+
+void set_first_stop(uint8_t switching);
+
+void set_program_started(uint8_t switching);
 
 #endif

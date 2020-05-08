@@ -77,11 +77,11 @@ void sound_remote(float* data){
 	//go forward if want to and can
 	if(max_norm_index >= FREQ_FORWARD_L && max_norm_index <= FREQ_FORWARD_H){
 
-		if(forward && program_started){
+		if(forward && get_program_started()){
 			audio_displacement(forward_move);
 		}
 		else{
-			program_started = ON; //first frequency has been produced to lunch the program.
+			set_program_started(ON); //first frequency has been produced to lunch the program.
 		}
 	}
 	//turn left if want to and can
@@ -101,14 +101,14 @@ void sound_remote(float* data){
 		if(deadend){
 			audio_displacement(dead_end_turn);
 		}
-		else if(backward && program_started){
+		else if(backward && get_program_started()){
 			audio_displacement(backward_turn);
 		}
 	}
 	else{
 		left_motor_set_speed(0);
 		right_motor_set_speed(0);
-		first_stop = FS_DONE;
+		set_first_stop(FS_DONE);
 	}
 	right = DISABLE_DIR; left = DISABLE_DIR; forward = DISABLE_DIR; backward = DISABLE_DIR; deadend = DISABLE_DIR;
 }
@@ -133,11 +133,11 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 	static uint16_t nb_samples = 0;
 	uint8_t move = get_position();
 
-	if(move || !program_started){ //process audio only if in cross-road
+	if(move || !get_program_started()){ //process audio only if in cross-road or start
 
-		if(first_stop && !(move==dead_end)){
+		if((get_first_stop() && !(move==dead_end)) && get_program_started()){
 			audio_displacement(forward_initial);
-			first_stop = FS_DONE;
+			set_first_stop(FS_DONE);
 		}
 
 		//loop to fill the buffers
@@ -180,8 +180,6 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 		}
 	}
 }
-
-
 
 float* get_audio_buffer_ptr(BUFFER_NAME_t name){
 	if(name == LEFT_CMPLX_INPUT){

@@ -48,10 +48,10 @@ static THD_FUNCTION(PidRegulator, arg) {
 
 
     while(1){
-        if(!get_position() && program_started){
+        if(!get_position() && get_program_started()){
         	time = chVTGetSystemTime();
 
-        	first_stop= FS_TO_BE_DONE;
+        	set_first_stop(FS_TO_BE_DONE);
 
         	clear_leds();
 
