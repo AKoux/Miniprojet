@@ -10,6 +10,8 @@
 //constants for the different parts of the lil' project
 
 enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
+
+//in relation with speed of the robot
 #define ERROR_THRESHOLD			20.f			//experimental
 #define KP						0.7f			//experimental
 #define KI						0.0001f			//experimental
@@ -20,6 +22,7 @@ enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
 #define ON						1
 #define OFF						0
 
+//for first_Stop variable
 #define FS_DONE					0
 #define FS_TO_BE_DONE			1
 
@@ -33,7 +36,5 @@ extern uint8_t first_stop; 		//for a preliminary advancement when arriving at a 
 extern uint8_t program_started; //wait for first order when placing robot in maze
 
 extern parameter_namespace_t parameter_root;
-
-
 
 #endif

@@ -12,7 +12,7 @@
 uint get_position(void);
 //returns the difference between right and left side of the robot
 int get_side(void);
-//changes values used in get_position()
+//updates values used in get_position()
 void ir_condition(void);
 
 #endif /* IR_PROCESSING_H_ */

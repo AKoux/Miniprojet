@@ -7,16 +7,15 @@
 
 #include <sensors/proximity.h>
 #include <ir_processing.h>
-#include <arm_math.h>
 
 
-#define CHECK	5		//Verification margin before confirm the position state (we "CHECK" consecutive times the get_prox())
+#define CHECK	5		//Verification margin before confirm the position state (we "CHECK" 5 consecutive times the get_prox())
 
 #define MUR_PROCHE	280 //to modify according to the environment
 
-static uint left_proche; static uint forward_proche; static uint right_proche;
+static uint left_proche; static uint forward_proche; static uint right_proche; //used in two functions
 
-//----------------------public functions-----------------------------------------------------------
+/*--------------------------------functions--------------------------------------*/
 
 //returns the position/crossroad
 uint get_position(void){
@@ -91,14 +90,14 @@ int get_side(void){
 	return (get_prox(ir3)-get_prox(ir6));
 }
 
-//changes values used in get_position()
+//updates values used in get_position()
 void ir_condition(void){
 	static uint16_t IR1=0; static uint16_t IR8=0; static uint16_t IR3=0;
 	static uint16_t IR6=0; static float IR_avant;
 
-	left_proche = 0;
-	right_proche = 0;
-	forward_proche = 0;
+	left_proche 	= OFF;
+	right_proche 	= OFF;
+	forward_proche 	= OFF;
 
     IR8 = get_prox(ir8);
     IR1 = get_prox(ir1);
@@ -107,7 +106,7 @@ void ir_condition(void){
     IR_avant = (IR1+IR8)/2.; //moyenne des deux capteurs avants
 
 
-	if(IR6>MUR_PROCHE)left_proche=1;
-	if(IR3>MUR_PROCHE)right_proche=1;
-	if(IR_avant>MUR_PROCHE)forward_proche=1;
+	if(IR6>MUR_PROCHE)left_proche = ON;
+	if(IR3>MUR_PROCHE)right_proche = ON;
+	if(IR_avant>MUR_PROCHE)forward_proche = ON;
 }

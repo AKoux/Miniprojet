@@ -136,14 +136,7 @@ build/obj/ir_processing.o: ir_processing.c \
  ../../lib/e-puck2_main-processor/src/usbcfg.h \
  ../../lib/e-puck2_main-processor/ChibiOS//os/hal/lib/streams/chprintf.h \
  c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\lib\gcc\arm-none-eabi\7.2.1\include\stdarg.h \
- ../../lib/e-puck2_main-processor/src/sensors/proximity.h ir_processing.h \
- ../../lib/e-puck2_main-processor/ChibiOS//os/ext/CMSIS/include/arm_math.h \
- ../../lib/e-puck2_main-processor/ChibiOS//os/ext/CMSIS/include/core_cm4.h \
- c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\string.h \
- c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\xlocale.h \
- c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\strings.h \
- c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\sys\string.h \
- c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\math.h
+ ../../lib/e-puck2_main-processor/src/sensors/proximity.h ir_processing.h
 
 ../../lib/e-puck2_main-processor/ChibiOS//os/rt/include/ch.h:
 
@@ -426,17 +419,3 @@ c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-20
 ../../lib/e-puck2_main-processor/src/sensors/proximity.h:
 
 ir_processing.h:
-
-../../lib/e-puck2_main-processor/ChibiOS//os/ext/CMSIS/include/arm_math.h:
-
-../../lib/e-puck2_main-processor/ChibiOS//os/ext/CMSIS/include/core_cm4.h:
-
-c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\string.h:
-
-c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\xlocale.h:
-
-c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\strings.h:
-
-c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\sys\string.h:
-
-c:\users\alexa\downloads\programmes\eclipse_e-puck2\tools\gcc-arm-none-eabi-7-2017-q4-major-win32\arm-none-eabi\include\math.h:

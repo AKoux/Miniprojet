@@ -21,12 +21,12 @@ static float micLeft_output[FFT_SIZE];
 
 #define MIN_VALUE_THRESHOLD	10000 
 
-#define MIN_FREQ		30	//we don't analyze before this index to not use resources for nothing
-#define FREQ_FORWARD	36	//562.5Hz (= 36*15.625, 15.625 is the resolution)
-#define FREQ_LEFT		42	//656.25Hz
-#define FREQ_RIGHT		48	//750HZ
-#define FREQ_BACKWARD	54	//843.75Hz
-#define MAX_FREQ		60	//we don't analyze after this index to not use resources for nothing
+#define MIN_FREQ		60	//we don't analyze before this index to not use resources for nothing
+#define FREQ_FORWARD	66	//1031.25 [Hz] (= 66*15.625, 15.625 is the resolution)	C6
+#define FREQ_LEFT		72	//1125 [Hz]												D6
+#define FREQ_RIGHT		78	//1218 [HZ]												D#6/Eb6
+#define FREQ_BACKWARD	84	//1312.5 [Hz]											E6
+#define MAX_FREQ		90	//we don't analyze after this index to not use resources for nothing
 
 #define FREQ_FORWARD_L		(FREQ_FORWARD-1)
 #define FREQ_FORWARD_H		(FREQ_FORWARD+1)
@@ -41,19 +41,19 @@ static float micLeft_output[FFT_SIZE];
 
 #define FRONT_SHORT 	340 //before audio choice
 #define FRONT_LONG 		450 //after audio choice
-#define ROT 			325 //experimentation: + 1 steps
+#define ROT 			325 //90 deg rotation, experimentation: + 1 steps
 
 
 #define	DISABLE_DIR	0
 #define	ENABLE_DIR	1
 
 
-//static values to translate get_position()
-static uint8_t forward = 0;
-static uint8_t left = 0;
-static uint8_t right = 0;
+//static values to translate get_position(), used in 3 different functions.
+static uint8_t forward	= 0;
+static uint8_t left		= 0;
+static uint8_t right 	= 0;
 static uint8_t backward = 0;
-static uint8_t deadend = 0;
+static uint8_t deadend 	= 0;
 
 enum DISPLACEMENT{forward_move, left_turn, right_turn, backward_turn, forward_initial, dead_end_turn}; //all the possible displacement with audio
 /*
@@ -174,10 +174,7 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 			 */
 			arm_cmplx_mag_f32(micLeft_cmplx_input, micLeft_output, FFT_SIZE);
 
-
-
 			nb_samples = 0;
-
 
 			sound_remote(micLeft_output);
 		}
@@ -198,6 +195,7 @@ float* get_audio_buffer_ptr(BUFFER_NAME_t name){
 	}
 }
 
+//enable and disable the directions corresponding to the position.
 void direction_enable(uint direction){
 	switch(direction)
 	{

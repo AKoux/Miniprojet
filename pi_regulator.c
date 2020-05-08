@@ -32,7 +32,6 @@ int16_t pi_regulator(float difference){
 	integral = integral + error;
 	last_error = error;
 
-	//speed = KP * (ERROR_COEF * error + LAST_ERROR_COEF * last_error);
 	speed = KP * error + KI * integral + KD * derivative;
     return (int16_t)speed;
 }
@@ -48,7 +47,6 @@ static THD_FUNCTION(PiRegulator, arg) {
     int16_t speed_correction = 0;
 
 
-
     while(1){
         if(!get_position() && program_started){
         	time = chVTGetSystemTime();
@@ -62,18 +60,15 @@ static THD_FUNCTION(PiRegulator, arg) {
 
         	if(speed_correction > MAX_SPPED_CORR){
         		speed_correction = MAX_SPPED_CORR;
-        		chprintf((BaseSequentialStream *) &SD3," aess\n");
         	    }
         	if(speed_correction < -MAX_SPPED_CORR){
         		speed_correction = -MAX_SPPED_CORR;
-        		chprintf((BaseSequentialStream *) &SD3," aess\n");
         	    }
 
         	right_motor_set_speed(SPEED_INI  + speed_correction);
         	left_motor_set_speed(SPEED_INI - speed_correction);
         	//100Hz
         	chThdSleepUntilWindowed(time, time + MS2ST(10));
-
 
         }
     }

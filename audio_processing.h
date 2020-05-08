@@ -36,7 +36,7 @@ float* get_audio_buffer_ptr(BUFFER_NAME_t name);
 void direction_enable(uint direction);
 
 /*
-*	sets the LEDs crossroad
+*	sets the LEDs at crossroads
 */
 void direction_led(void);
 
@@ -45,6 +45,9 @@ void direction_led(void);
 */
 void audio_displacement(uint displacement);
 
+/*
+*	with:
+*/
 void rotation(uint direction, uint rot_step);
 
 void move_forward(uint forward_step);
