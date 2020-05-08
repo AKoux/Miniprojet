@@ -8,11 +8,11 @@
 #include <motors.h>
 #include "leds.h"
 #include <audio_processing.h>
-#include <pi_regulator.h>
+#include <pid_regulator.h>
 #include <ir_processing.h>
 
-//simple PI regulator implementation
-int16_t pi_regulator(float difference){
+//simple PIDregulator implementation
+int16_t pid_regulator(float difference){
 
 	int16_t error = 0;
 	static int16_t last_error = 0;
@@ -36,8 +36,8 @@ int16_t pi_regulator(float difference){
     return (int16_t)speed;
 }
 
-static THD_WORKING_AREA(waPiRegulator, 256);
-static THD_FUNCTION(PiRegulator, arg) {
+static THD_WORKING_AREA(waPidRegulator, 256);
+static THD_FUNCTION(PidRegulator, arg) {
 
     chRegSetThreadName(__FUNCTION__);
     (void)arg;
@@ -56,7 +56,7 @@ static THD_FUNCTION(PiRegulator, arg) {
         	clear_leds();
 
         	//computes a correction factor to let the robot stay in the middle of the corridor
-        	speed_correction = pi_regulator(get_side());
+        	speed_correction = pid_regulator(get_side());
 
         	if(speed_correction > MAX_SPPED_CORR){
         		speed_correction = MAX_SPPED_CORR;
@@ -75,6 +75,6 @@ static THD_FUNCTION(PiRegulator, arg) {
 
 }
 
-void pi_regulator_start(void){
-	chThdCreateStatic(waPiRegulator, sizeof(waPiRegulator), NORMALPRIO, PiRegulator, NULL);
+void pid_regulator_start(void){
+	chThdCreateStatic(waPidRegulator, sizeof(waPidRegulator), NORMALPRIO, PidRegulator, NULL);
 }

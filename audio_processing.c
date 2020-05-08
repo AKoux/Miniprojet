@@ -21,12 +21,12 @@ static float micLeft_output[FFT_SIZE];
 
 #define MIN_VALUE_THRESHOLD	10000 
 
-#define MIN_FREQ		60	//we don't analyze before this index to not use resources for nothing
-#define FREQ_FORWARD	66	//1031.25 [Hz] (= 66*15.625, 15.625 is the resolution)	C6
-#define FREQ_LEFT		72	//1125 [Hz]												D6
-#define FREQ_RIGHT		78	//1218 [HZ]												D#6/Eb6
-#define FREQ_BACKWARD	84	//1312.5 [Hz]											E6
-#define MAX_FREQ		90	//we don't analyze after this index to not use resources for nothing
+#define MIN_FREQ		30	//we don't analyze before this index to not use resources for nothing
+#define FREQ_FORWARD	36	//562.5 	[Hz] (= 66*15.625, 15.625 is the resolution)
+#define FREQ_LEFT		42	//656.25	[Hz]
+#define FREQ_RIGHT		48	//750 		[HZ]
+#define FREQ_BACKWARD	54	//843.75	[Hz]
+#define MAX_FREQ		60	//we don't analyze after this index to not use resources for nothing
 
 #define FREQ_FORWARD_L		(FREQ_FORWARD-1)
 #define FREQ_FORWARD_H		(FREQ_FORWARD+1)
@@ -101,7 +101,7 @@ void sound_remote(float* data){
 		if(deadend){
 			audio_displacement(dead_end_turn);
 		}
-		else if(backward && !program_started){
+		else if(backward && program_started){
 			audio_displacement(backward_turn);
 		}
 	}

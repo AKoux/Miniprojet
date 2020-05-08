@@ -56,21 +56,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  17 .comment      0000015e  00000000  00000000  000315b9  2**0
                   CONTENTS, READONLY
- 18 .debug_info   000f17e2  00000000  00000000  00031717  2**0
+ 18 .debug_info   000f17f7  00000000  00000000  00031717  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .debug_abbrev 0001057d  00000000  00000000  00122ef9  2**0
+ 19 .debug_abbrev 0001057d  00000000  00000000  00122f0e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 20 .debug_loc    0001663a  00000000  00000000  00133476  2**0
+ 20 .debug_loc    00016639  00000000  00000000  0013348b  2**0
                   CONTENTS, READONLY, DEBUGGING
- 21 .debug_aranges 00001b68  00000000  00000000  00149ab0  2**3
+ 21 .debug_aranges 00001b68  00000000  00000000  00149ac8  2**3
                   CONTENTS, READONLY, DEBUGGING
- 22 .debug_ranges 00003ad8  00000000  00000000  0014b618  2**0
+ 22 .debug_ranges 00003ad8  00000000  00000000  0014b630  2**0
                   CONTENTS, READONLY, DEBUGGING
- 23 .debug_line   0002b709  00000000  00000000  0014f0f0  2**0
+ 23 .debug_line   0002b70b  00000000  00000000  0014f108  2**0
                   CONTENTS, READONLY, DEBUGGING
- 24 .debug_str    00008d1b  00000000  00000000  0017a7f9  2**0
+ 24 .debug_str    00008d1f  00000000  00000000  0017a813  2**0
                   CONTENTS, READONLY, DEBUGGING
- 25 .debug_frame  00008024  00000000  00000000  00183514  2**2
+ 25 .debug_frame  00008024  00000000  00000000  00183534  2**2
                   CONTENTS, READONLY, DEBUGGING
 SYMBOL TABLE:
 08000000 l    d  startup	00000000 startup
@@ -161,12 +161,12 @@ e000ed04 l       *ABS*	00000000 SCB_ICSR
 200045bb l     O .bss	00000001 p.11373
 200045bc l     O .bss	00000001 position.11365
 200045c0 l     O .bss	00000004 right_proche
-00000000 l    df *ABS*	00000000 pi_regulator.c
-08002ba0 l     F .text	000000cc PiRegulator
+00000000 l    df *ABS*	00000000 pid_regulator.c
+08002ba0 l     F .text	000000cc PidRegulator
 200045c4 l     O .bss	00000002 integral.11938
 200045c6 l     O .bss	00000002 last_error.11936
-200045c8 l     O .bss	00000278 waPiRegulator
-08011a20 l     O .text	0000000c __FUNCTION__.11944
+200045c8 l     O .bss	00000278 waPidRegulator
+08011a20 l     O .text	0000000d __FUNCTION__.11944
 08011a30 l     O .text	0000000c __func__.7153
 00000000 l    df *ABS*	00000000 spi3_slave_lld.c
 08002cb0 l     F .text	00000068 spi3_slave_lld_serve_tx_interrupt.part.0
@@ -818,7 +818,6 @@ e000ed04 l       *ABS*	00000000 SCB_ICSR
 00000000 g       startup	00000000 __ram7_start__
 08000300 g     F .text	00000170 PDM_Filter_Init
 080068b0 g     F .text	00000088 chCoreAlloc
-08002c70 g     F .text	00000038 pi_regulator_start
 080013d4 g     F .text	00000022 .hidden __aeabi_i2d
 08004da0 g     F .text	00000048 chDbgCheckClassS
 08004970  w    F .text	0000001c VectorF0
@@ -877,6 +876,7 @@ e000ed04 l       *ABS*	00000000 SCB_ICSR
 08001a80 g     F .text	0000009e .hidden __truncdfsf2
 00000000 g       .ram3	00000000 __ram3_free__
 080001c0 g       startup	00000000 __init_array_end
+08002c70 g     F .text	00000038 pid_regulator_start
 0800fd10 g     F .text	00000e28 _dtoa_r
 0800e050 g     F .text	00000548 _malloc_r
 0800cb70 g     F .text	0000002c pwm_lld_enable_channel
@@ -887,6 +887,7 @@ e000ed04 l       *ABS*	00000000 SCB_ICSR
 08014830 g     O .text	00000e10 armBitRevIndexTable1024
 08004070 g     F .text	0000002c right_motor_set_pos
 08004970  w    F .text	0000001c Vector180
+08002af0 g     F .text	000000a8 pid_regulator
 0800ab50 g     F .text	000000d4 sdc_lld_read_special
 08006750 g     F .text	00000104 chOQWriteTimeout
 080071f0 g     F .text	0000002c pwmObjectInit
@@ -963,7 +964,6 @@ e000ed04 l       *ABS*	00000000 SCB_ICSR
 20000400 g       .mstack	00000000 __main_stack_end__
 08009100 g     F .text	00000050 Vector78
 0800198c g     F .text	00000012 .hidden __aeabi_dcmpeq
-08002af0 g     F .text	000000a8 pi_regulator
 20001584 g       .data	00000000 _edata
 0800d2e0 g     F .text	000004ba arm_cfft_radix8by4_f32
 20007634 g     O .bss	00000010 GPTD12

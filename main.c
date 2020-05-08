@@ -15,7 +15,7 @@
 
 #include <audio_processing.h>
 #include <ir_processing.h>
-#include <pi_regulator.h>
+#include <pid_regulator.h>
 #include <fft.h>
 #include <arm_math.h>
 
@@ -60,7 +60,7 @@ int main(void)
 
     /*--------------------------stars the thread----------------------------------*/
 
-    pi_regulator_start();
+    pid_regulator_start();
     proximity_start();
     //starts the microphones processing thread.
     //it calls the callback given in parameter when samples are ready

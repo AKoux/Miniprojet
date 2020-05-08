@@ -2786,7 +2786,7 @@ Disassembly of section .text:
  8002152:	491a      	ldr	r1, [pc, #104]	; (80021bc <main+0x9c>)
  8002154:	481a      	ldr	r0, [pc, #104]	; (80021c0 <main+0xa0>)
  8002156:	f002 fb43 	bl	80047e0 <messagebus_init>
- 800215a:	f000 fd89 	bl	8002c70 <pi_regulator_start>
+ 800215a:	f000 fd89 	bl	8002c70 <pid_regulator_start>
  800215e:	f002 f98f 	bl	8004480 <proximity_start>
  8002162:	4818      	ldr	r0, [pc, #96]	; (80021c4 <main+0xa4>)
  8002164:	f001 f8e4 	bl	8003330 <mic_start>
@@ -3161,8 +3161,8 @@ Disassembly of section .text:
  8002502:	f7ff fea5 	bl	8002250 <direction_enable>
  8002506:	f7ff fef3 	bl	80022f0 <direction_led>
  800250a:	ed9f 7a4f 	vldr	s14, [pc, #316]	; 8002648 <sound_remote+0x158>
- 800250e:	f104 00f0 	add.w	r0, r4, #240	; 0xf0
- 8002512:	233c      	movs	r3, #60	; 0x3c
+ 800250e:	f104 0078 	add.w	r0, r4, #120	; 0x78
+ 8002512:	231e      	movs	r3, #30
  8002514:	f04f 32ff 	mov.w	r2, #4294967295
  8002518:	ecf0 7a01 	vldmia	r0!, {s15}
  800251c:	eef4 7ac7 	vcmpe.f32	s15, s14
@@ -3172,10 +3172,10 @@ Disassembly of section .text:
  8002528:	f103 0301 	add.w	r3, r3, #1
  800252c:	bfc8      	it	gt
  800252e:	eeb0 7a67 	vmovgt.f32	s14, s15
- 8002532:	2b5b      	cmp	r3, #91	; 0x5b
+ 8002532:	2b3d      	cmp	r3, #61	; 0x3d
  8002534:	d1f0      	bne.n	8002518 <sound_remote+0x28>
  8002536:	b292      	uxth	r2, r2
- 8002538:	f1a2 0341 	sub.w	r3, r2, #65	; 0x41
+ 8002538:	f1a2 0323 	sub.w	r3, r2, #35	; 0x23
  800253c:	2b02      	cmp	r3, #2
  800253e:	d80f      	bhi.n	8002560 <sound_remote+0x70>
  8002540:	4c42      	ldr	r4, [pc, #264]	; (800264c <sound_remote+0x15c>)
@@ -3191,7 +3191,7 @@ Disassembly of section .text:
  8002556:	f8df 9110 	ldr.w	r9, [pc, #272]	; 8002668 <sound_remote+0x178>
  800255a:	f7ff ff41 	bl	80023e0 <move_forward>
  800255e:	e028      	b.n	80025b2 <sound_remote+0xc2>
- 8002560:	f1a2 0347 	sub.w	r3, r2, #71	; 0x47
+ 8002560:	f1a2 0329 	sub.w	r3, r2, #41	; 0x29
  8002564:	2b02      	cmp	r3, #2
  8002566:	d80a      	bhi.n	800257e <sound_remote+0x8e>
  8002568:	4e3b      	ldr	r6, [pc, #236]	; (8002658 <sound_remote+0x168>)
@@ -3203,7 +3203,7 @@ Disassembly of section .text:
  8002574:	f8df 80ec 	ldr.w	r8, [pc, #236]	; 8002664 <sound_remote+0x174>
  8002578:	f8df 90ec 	ldr.w	r9, [pc, #236]	; 8002668 <sound_remote+0x178>
  800257c:	e019      	b.n	80025b2 <sound_remote+0xc2>
- 800257e:	f1a2 034d 	sub.w	r3, r2, #77	; 0x4d
+ 800257e:	f1a2 032f 	sub.w	r3, r2, #47	; 0x2f
  8002582:	2b02      	cmp	r3, #2
  8002584:	d824      	bhi.n	80025d0 <sound_remote+0xe0>
  8002586:	4f35      	ldr	r7, [pc, #212]	; (800265c <sound_remote+0x16c>)
@@ -3235,7 +3235,7 @@ Disassembly of section .text:
  80025c8:	d139      	bne.n	800263e <sound_remote+0x14e>
  80025ca:	b003      	add	sp, #12
  80025cc:	e8bd 83f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, r9, pc}
- 80025d0:	3a53      	subs	r2, #83	; 0x53
+ 80025d0:	3a35      	subs	r2, #53	; 0x35
  80025d2:	2a02      	cmp	r2, #2
  80025d4:	d817      	bhi.n	8002606 <sound_remote+0x116>
  80025d6:	f8df 808c 	ldr.w	r8, [pc, #140]	; 8002664 <sound_remote+0x174>
@@ -3246,7 +3246,7 @@ Disassembly of section .text:
  80025e8:	b12b      	cbz	r3, 80025f6 <sound_remote+0x106>
  80025ea:	4b19      	ldr	r3, [pc, #100]	; (8002650 <sound_remote+0x160>)
  80025ec:	781b      	ldrb	r3, [r3, #0]
- 80025ee:	b913      	cbnz	r3, 80025f6 <sound_remote+0x106>
+ 80025ee:	b113      	cbz	r3, 80025f6 <sound_remote+0x106>
  80025f0:	2003      	movs	r0, #3
  80025f2:	f7ff ff35 	bl	8002460 <audio_displacement>
  80025f6:	4c15      	ldr	r4, [pc, #84]	; (800264c <sound_remote+0x15c>)
@@ -3768,10 +3768,10 @@ Disassembly of section .text:
  8002ae0:	200045bc 	.word	0x200045bc
 	...
 
-08002af0 <pi_regulator>:
+08002af0 <pid_regulator>:
  8002af0:	b570      	push	{r4, r5, r6, lr}
  8002af2:	eebd 0ac0 	vcvt.s32.f32	s0, s0
- 8002af6:	4d22      	ldr	r5, [pc, #136]	; (8002b80 <pi_regulator+0x90>)
+ 8002af6:	4d22      	ldr	r5, [pc, #136]	; (8002b80 <pid_regulator+0x90>)
  8002af8:	ee10 3a10 	vmov	r3, s0
  8002afc:	b082      	sub	sp, #8
  8002afe:	b21c      	sxth	r4, r3
@@ -3782,15 +3782,15 @@ Disassembly of section .text:
  8002b0a:	f021 4300 	bic.w	r3, r1, #2147483648	; 0x80000000
  8002b0e:	4619      	mov	r1, r3
  8002b10:	2200      	movs	r2, #0
- 8002b12:	4b1c      	ldr	r3, [pc, #112]	; (8002b84 <pi_regulator+0x94>)
+ 8002b12:	4b1c      	ldr	r3, [pc, #112]	; (8002b84 <pid_regulator+0x94>)
  8002b14:	f7fe ff44 	bl	80019a0 <__aeabi_dcmplt>
- 8002b18:	bb68      	cbnz	r0, 8002b76 <pi_regulator+0x86>
- 8002b1a:	491b      	ldr	r1, [pc, #108]	; (8002b88 <pi_regulator+0x98>)
- 8002b1c:	481b      	ldr	r0, [pc, #108]	; (8002b8c <pi_regulator+0x9c>)
+ 8002b18:	bb68      	cbnz	r0, 8002b76 <pid_regulator+0x86>
+ 8002b1a:	491b      	ldr	r1, [pc, #108]	; (8002b88 <pid_regulator+0x98>)
+ 8002b1c:	481b      	ldr	r0, [pc, #108]	; (8002b8c <pid_regulator+0x9c>)
  8002b1e:	880a      	ldrh	r2, [r1, #0]
  8002b20:	8806      	ldrh	r6, [r0, #0]
- 8002b22:	ed9f 6a1b 	vldr	s12, [pc, #108]	; 8002b90 <pi_regulator+0xa0>
- 8002b26:	eddf 6a1b 	vldr	s13, [pc, #108]	; 8002b94 <pi_regulator+0xa4>
+ 8002b22:	ed9f 6a1b 	vldr	s12, [pc, #108]	; 8002b90 <pid_regulator+0xa0>
+ 8002b26:	eddf 6a1b 	vldr	s13, [pc, #108]	; 8002b94 <pid_regulator+0xa4>
  8002b2a:	8004      	strh	r4, [r0, #0]
  8002b2c:	b2a3      	uxth	r3, r4
  8002b2e:	441a      	add	r2, r3
@@ -3814,11 +3814,11 @@ Disassembly of section .text:
  8002b6a:	9a01      	ldr	r2, [sp, #4]
  8002b6c:	682b      	ldr	r3, [r5, #0]
  8002b6e:	429a      	cmp	r2, r3
- 8002b70:	d103      	bne.n	8002b7a <pi_regulator+0x8a>
+ 8002b70:	d103      	bne.n	8002b7a <pid_regulator+0x8a>
  8002b72:	b002      	add	sp, #8
  8002b74:	bd70      	pop	{r4, r5, r6, pc}
  8002b76:	2000      	movs	r0, #0
- 8002b78:	e7f7      	b.n	8002b6a <pi_regulator+0x7a>
+ 8002b78:	e7f7      	b.n	8002b6a <pid_regulator+0x7a>
  8002b7a:	f7ff fb29 	bl	80021d0 <__stack_chk_fail>
  8002b7e:	bf00      	nop
  8002b80:	20000b00 	.word	0x20000b00
@@ -3829,16 +3829,16 @@ Disassembly of section .text:
  8002b94:	3f333333 	.word	0x3f333333
 	...
 
-08002ba0 <PiRegulator>:
+08002ba0 <PidRegulator>:
  8002ba0:	e92d 4ff0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
- 8002ba4:	4d2b      	ldr	r5, [pc, #172]	; (8002c54 <PiRegulator+0xb4>)
- 8002ba6:	4b2c      	ldr	r3, [pc, #176]	; (8002c58 <PiRegulator+0xb8>)
+ 8002ba4:	4d2b      	ldr	r5, [pc, #172]	; (8002c54 <PidRegulator+0xb4>)
+ 8002ba6:	4b2c      	ldr	r3, [pc, #176]	; (8002c58 <PidRegulator+0xb8>)
  8002ba8:	69aa      	ldr	r2, [r5, #24]
- 8002baa:	492c      	ldr	r1, [pc, #176]	; (8002c5c <PiRegulator+0xbc>)
+ 8002baa:	492c      	ldr	r1, [pc, #176]	; (8002c5c <PidRegulator+0xbc>)
  8002bac:	681b      	ldr	r3, [r3, #0]
- 8002bae:	4f2c      	ldr	r7, [pc, #176]	; (8002c60 <PiRegulator+0xc0>)
- 8002bb0:	f8df a0b0 	ldr.w	sl, [pc, #176]	; 8002c64 <PiRegulator+0xc4>
- 8002bb4:	f8df b0b0 	ldr.w	fp, [pc, #176]	; 8002c68 <PiRegulator+0xc8>
+ 8002bae:	4f2c      	ldr	r7, [pc, #176]	; (8002c60 <PidRegulator+0xc0>)
+ 8002bb0:	f8df a0b0 	ldr.w	sl, [pc, #176]	; 8002c64 <PidRegulator+0xc4>
+ 8002bb4:	f8df b0b0 	ldr.w	fp, [pc, #176]	; 8002c68 <PidRegulator+0xc8>
  8002bb8:	6191      	str	r1, [r2, #24]
  8002bba:	b083      	sub	sp, #12
  8002bbc:	f04f 0920 	mov.w	r9, #32
@@ -3846,10 +3846,10 @@ Disassembly of section .text:
  8002bc2:	f04f 0800 	mov.w	r8, #0
  8002bc6:	f7ff fe83 	bl	80028d0 <get_position>
  8002bca:	2800      	cmp	r0, #0
- 8002bcc:	d1fb      	bne.n	8002bc6 <PiRegulator+0x26>
+ 8002bcc:	d1fb      	bne.n	8002bc6 <PidRegulator+0x26>
  8002bce:	783b      	ldrb	r3, [r7, #0]
  8002bd0:	2b00      	cmp	r3, #0
- 8002bd2:	d0f8      	beq.n	8002bc6 <PiRegulator+0x26>
+ 8002bd2:	d0f8      	beq.n	8002bc6 <PidRegulator+0x26>
  8002bd4:	f389 8811 	msr	BASEPRI, r9
  8002bd8:	f002 fffa 	bl	8005bd0 <_stats_start_measure_crit_thd>
  8002bdc:	f001 ffe8 	bl	8004bb0 <_dbg_check_lock>
@@ -3858,12 +3858,12 @@ Disassembly of section .text:
  8002be6:	f003 f80b 	bl	8005c00 <_stats_stop_measure_crit_thd>
  8002bea:	682b      	ldr	r3, [r5, #0]
  8002bec:	42ab      	cmp	r3, r5
- 8002bee:	d007      	beq.n	8002c00 <PiRegulator+0x60>
+ 8002bee:	d007      	beq.n	8002c00 <PidRegulator+0x60>
  8002bf0:	69aa      	ldr	r2, [r5, #24]
  8002bf2:	689b      	ldr	r3, [r3, #8]
  8002bf4:	6892      	ldr	r2, [r2, #8]
  8002bf6:	429a      	cmp	r2, r3
- 8002bf8:	d202      	bcs.n	8002c00 <PiRegulator+0x60>
+ 8002bf8:	d202      	bcs.n	8002c00 <PidRegulator+0x60>
  8002bfa:	4658      	mov	r0, fp
  8002bfc:	f001 ff38 	bl	8004a70 <chSysHalt>
  8002c00:	f388 8811 	msr	BASEPRI, r8
@@ -3873,7 +3873,7 @@ Disassembly of section .text:
  8002c0e:	f7ff fde7 	bl	80027e0 <get_side>
  8002c12:	ee07 0a90 	vmov	s15, r0
  8002c16:	eeb8 0ae7 	vcvt.f32.s32	s0, s15
- 8002c1a:	f7ff ff69 	bl	8002af0 <pi_regulator>
+ 8002c1a:	f7ff ff69 	bl	8002af0 <pid_regulator>
  8002c1e:	f06f 0420 	mvn.w	r4, #32
  8002c22:	4284      	cmp	r4, r0
  8002c24:	bfb8      	it	lt
@@ -3891,8 +3891,8 @@ Disassembly of section .text:
  8002c46:	f002 fd2b 	bl	80056a0 <chThdSleepUntilWindowed>
  8002c4a:	f7ff fe41 	bl	80028d0 <get_position>
  8002c4e:	2800      	cmp	r0, #0
- 8002c50:	d1b9      	bne.n	8002bc6 <PiRegulator+0x26>
- 8002c52:	e7bc      	b.n	8002bce <PiRegulator+0x2e>
+ 8002c50:	d1b9      	bne.n	8002bc6 <PidRegulator+0x26>
+ 8002c52:	e7bc      	b.n	8002bce <PidRegulator+0x2e>
  8002c54:	20006890 	.word	0x20006890
  8002c58:	20000b00 	.word	0x20000b00
  8002c5c:	08011a20 	.word	0x08011a20
@@ -3901,12 +3901,12 @@ Disassembly of section .text:
  8002c68:	08011a30 	.word	0x08011a30
  8002c6c:	00000000 	.word	0x00000000
 
-08002c70 <pi_regulator_start>:
+08002c70 <pid_regulator_start>:
  8002c70:	b510      	push	{r4, lr}
- 8002c72:	4c0a      	ldr	r4, [pc, #40]	; (8002c9c <pi_regulator_start+0x2c>)
- 8002c74:	4b0a      	ldr	r3, [pc, #40]	; (8002ca0 <pi_regulator_start+0x30>)
+ 8002c72:	4c0a      	ldr	r4, [pc, #40]	; (8002c9c <pid_regulator_start+0x2c>)
+ 8002c74:	4b0a      	ldr	r3, [pc, #40]	; (8002ca0 <pid_regulator_start+0x30>)
  8002c76:	6822      	ldr	r2, [r4, #0]
- 8002c78:	480a      	ldr	r0, [pc, #40]	; (8002ca4 <pi_regulator_start+0x34>)
+ 8002c78:	480a      	ldr	r0, [pc, #40]	; (8002ca4 <pid_regulator_start+0x34>)
  8002c7a:	b084      	sub	sp, #16
  8002c7c:	f44f 711e 	mov.w	r1, #632	; 0x278
  8002c80:	9203      	str	r2, [sp, #12]
@@ -3917,7 +3917,7 @@ Disassembly of section .text:
  8002c8c:	9a03      	ldr	r2, [sp, #12]
  8002c8e:	6823      	ldr	r3, [r4, #0]
  8002c90:	429a      	cmp	r2, r3
- 8002c92:	d101      	bne.n	8002c98 <pi_regulator_start+0x28>
+ 8002c92:	d101      	bne.n	8002c98 <pid_regulator_start+0x28>
  8002c94:	b004      	add	sp, #16
  8002c96:	bd10      	pop	{r4, pc}
  8002c98:	f7ff fa9a 	bl	80021d0 <__stack_chk_fail>
@@ -27092,7 +27092,7 @@ Disassembly of section .text:
  8011a10:	00000400 08012830 08014830 00000708     ....0(..0H......
 
 08011a20 <__FUNCTION__.11944>:
- 8011a20:	65526950 616c7567 00726f74 00000000     PiRegulator.....
+ 8011a20:	52646950 6c756765 726f7461 00000000     PidRegulator....
 
 08011a30 <__func__.7153>:
  8011a30:	79536863 6c6e5573 006b636f 00000000     chSysUnlock.....
