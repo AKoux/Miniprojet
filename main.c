@@ -27,6 +27,7 @@ CONDVAR_DECL(bus_condvar);
 static uint8_t first_stop = FS_TO_BE_DONE;	//for a preliminary advancement when arriving at a crossroad
 static uint8_t program_started = OFF;		//wait for first order when placing robot in maze
 
+//used for debugging
 static void serial_start(void)
 {
 	static SerialConfig ser_cfg = {
@@ -53,7 +54,7 @@ int main(void)
     usb_start();
     //inits the motors
     motors_init();
-    //start the msgbus
+    //starts the msgbus
     messagebus_init(&bus, &bus_lock, &bus_condvar);
 
     /*--------------------------stars the thread----------------------------------*/

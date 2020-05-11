@@ -22,7 +22,7 @@ static float micLeft_output[FFT_SIZE];
 #define MIN_VALUE_THRESHOLD	10000 
 
 #define MIN_FREQ		30	//we don't analyze before this index to not use resources for nothing
-#define FREQ_FORWARD	36	//562.5 	[Hz] (= 66*15.625, 15.625 is the resolution)
+#define FREQ_FORWARD	36	//562.5 	[Hz] (= 36*15.625, 15.625 is the resolution)
 #define FREQ_LEFT		42	//656.25	[Hz]
 #define FREQ_RIGHT		48	//750 		[HZ]
 #define FREQ_BACKWARD	54	//843.75	[Hz]
@@ -47,6 +47,7 @@ static float micLeft_output[FFT_SIZE];
 #define	DISABLE_DIR	0
 #define	ENABLE_DIR	1
 
+enum DISPLACEMENT{forward_move, left_turn, right_turn, backward_turn, forward_initial, dead_end_turn}; //all the possible displacement with audio
 
 //static values to translate get_position(), used in 3 different functions.
 static uint8_t forward	= 0;
@@ -55,7 +56,6 @@ static uint8_t right 	= 0;
 static uint8_t backward = 0;
 static uint8_t deadend 	= 0;
 
-enum DISPLACEMENT{forward_move, left_turn, right_turn, backward_turn, forward_initial, dead_end_turn}; //all the possible displacement with audio
 /*
 *	Simple function used to detect the highest value in a buffer
 *	and to execute a motor command depending on it
@@ -133,7 +133,7 @@ void processAudioData(int16_t *data, uint16_t num_samples){
 	static uint16_t nb_samples = 0;
 	uint8_t move = get_position();
 
-	if(move || !get_program_started()){ //process audio only if in cross-road or start
+	if(move || !get_program_started()){ //process audio only if in cross-road or ready to start
 
 		if((get_first_stop() && !(move==dead_end)) && get_program_started()){
 			audio_displacement(forward_initial);

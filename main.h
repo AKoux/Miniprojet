@@ -7,8 +7,6 @@
 
 //constants for the different parts of the lil' project
 
-enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
-
 //in relation with speed of the robot
 #define ERROR_THRESHOLD			20.f			//experimental
 #define KP						0.7f			//experimental
@@ -24,7 +22,9 @@ enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
 #define FS_DONE					0
 #define FS_TO_BE_DONE			1
 
-enum POSITION{hallway, l_turn, r_turn, l_r_turn, f_l_turn, f_r_turn, f_l_r_turn, dead_end}; //(l=left, r=right, f=forward) all the possible positions/crossroads.
+enum IR{ir1, ir2, ir3, ir4, ir5, ir6, ir7, ir8};
+//(l=left, r=right, f=forward) all the possible positions/crossroads.
+enum POSITION{hallway, l_turn, r_turn, l_r_turn, f_l_turn, f_r_turn, f_l_r_turn, dead_end};
 
 /** Robot wide IPC bus. **/
 

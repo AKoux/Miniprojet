@@ -21,9 +21,9 @@ int16_t pid_regulator(float difference){
 	int16_t speed = 0;
 
 	error = difference;
+
 	//disables the regulator if the error is to small
-	//this avoids to always move as we cannot exactly be where we want and 
-	//the camera is a bit noisy
+	//this avoids to always move
 	if(fabs(error) < ERROR_THRESHOLD){
 		return 0;
 	}
